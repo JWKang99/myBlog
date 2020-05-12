@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+
+<head th:replace="_fragment :: head(~{::title})">
+    <title>归档</title>
+</head>
+
+<body>
+
+    <!--导航栏,ui表示ui组件,inverted颜色反转-->
+    <nav th:replace="_fragment :: menu(4)"></nav>
+    <!--中间内容-->
+    <div class="m-container-small m-padded-tb-big">
+        <!--semantic中的container有响应式效果，根据不同的屏幕尺寸达到最好的效果-->
+        <div class="ui container">
+            <!-- 头部 -->
+            <div class="ui top padded segment">
+                <div class="ui middle aligned two column grid">
+                    <div class="column">
+                        <h3 class="ui teal header">归档</h3>
+                    </div>
+                    <div class="right aligned column">
+                        共
+                        <h2 class="ui orange header m-inline-block m-text-thin">114</h2>篇博客
+                    </div>
+                </div>
+            </div>
+            <h2 class="ui center aligned header">2017</h2>
+            <div class="ui fluid vertical menu">
+                <a href="#" target="_blank" class="item">
+                    <span>
+              <i class="small teal circle icon"></i>学习日志
+              <div class="ui teal basic left pointing label m-padded-mini">9月03日</div>
+            </span>
+                    <div class="ui orange basic left pointing label">原创</div>
+
+
+                </a>
+
+            </div>
+        </div>
+
+    </div>
+    <footer th:replace="_fragment :: footer"></footer>
+    <th:block th:replace="_fragment :: script"></th:block>
+    <script>
+        $('.menu.toggle').click(function() {
+            $('.m-item').toggleClass('m-mobile-hide');
+        });
+    </script>
+</body>
+
+</html>

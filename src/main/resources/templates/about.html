@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+
+<head th:replace="_fragment :: head(~{::title})">
+    <title>关于我</title>
+</head>
+
+<body>
+
+    <!--导航栏,ui表示ui组件,inverted颜色反转-->
+    <nav th:replace="_fragment :: menu(5)"></nav>
+    <!--中间内容-->
+    <div class="m-container-small m-padded-tb-big">
+        <!--semantic中的container有响应式效果，根据不同的屏幕尺寸达到最好的效果-->
+        <div class="ui container">
+            <div class="ui stackable grid">
+                <div class="eleven wide column">
+                    <img src="../static/images/1005-800x450.jpg" alt="" class="ui rounded image">
+                </div>
+                <div class="five wide column">
+                    <div class="ui top attached segment">
+                        <div class="ui header">关于我</div>
+                    </div>
+                    <div class="ui attached segment">
+                        <p class="m-text">康宁，一个新手开发者，折腾在0和1的世界中；一个努力的学习者，将学习无限循环，希望结识可以共同成长的小伙伴.</p>
+                        <p class="m-text">正在探索高校学习编程技术的方法...</p>
+                    </div>
+                    <div class="ui attached segment">
+                        <div class="ui orange basic label">编程</div>
+                        <div class="ui orange basic label">编程</div>
+                        <div class="ui orange basic label">编程</div>
+                        <div class="ui orange basic label">编程</div>
+                    </div>
+                    <div class="ui attached segment">
+                        <div class="ui orange basic label m-margin-tb-tiny">Java</div>
+                        <div class="ui orange basic label m-margin-tb-tiny">Node</div>
+                        <div class="ui orange basic label m-margin-tb-tiny">React</div>
+                        <div class="ui orange basic label m-margin-tb-tiny">MySQL</div>
+                    </div>
+                    <div class="ui bottom attached segment">
+                        <i href="#" class="link large github icon"></i>
+                        <a href="#" class="m-black"><i class="large github icon"></i></a>
+                        <a href="#"><i class="large weixin icon"></i></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <footer th:replace="_fragment :: footer"></footer>
+    <th:block th:replace="_fragment :: script"></th:block>
+    <script>
+        $('.menu.toggle').click(function() {
+            $('.m-item').toggleClass('m-mobile-hide');
+        });
+    </script>
+</body>
+
+</html>

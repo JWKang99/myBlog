@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head th:replace="_fragment :: head(~{::title})">
+    <meta charset="UTF-8">
+    <title>出错了</title>
+</head>
+<body>
+<nav class="ui inverted attached segment m-padded-tb-mini m-shadow-small">
+    <div class="ui container">
+        <!--导航菜单-->
+        <div class="ui inverted secondary stackable menu">
+            <h2 class="ui teal header item">出错了</h2>
+        </div>
+    </div>
+</nav>
+<br>
+<
+<div class="m-container-small m-padded-tb-massive">
+    <div class="ui container">
+         <div class="ui error message m-padded-tb-huge">
+            <h2>500</h2>
+            <p>对不起,服务器内部错误</p>
+        </div>
+    </div>
+</div>
+<br>
+<br>
+<br>
+<br>
+<br>
+<footer th:replace="_fragment :: footer"></footer>
+</body>
+</html>

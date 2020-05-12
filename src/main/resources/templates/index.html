@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="_fragment :: head(~{::title})">
+    <title>首页</title>
+</head>
+
+<body>
+
+<!--导航栏,ui表示ui组件,inverted颜色反转-->
+<!--    class="ui inverted attached segment m-padded-tb-mini m-shadow-small"-->
+<nav th:replace="_fragment :: menu(1)"></nav>
+<!--主体栏-->
+<div class="m-container m-padded-tb-big animated fadeIn">
+    <!--semantic中的container有响应式效果，根据不同的屏幕尺寸达到最好的效果-->
+    <div class="ui container m-container">
+        <div class="ui stackable grid">
+            <!--左边博客列表-->
+            <div class="eleven wide column">
+                <!--博客列表顶部标识-->
+                <div class="ui top attached segment">
+                    <div class="ui middle aligned two column grid">
+                        <div class="column">
+                            <h3 class="ui teal header">博客</h3>
+                        </div>
+                        <div class="right aligned column">
+                            共
+                            <h2 class="ui orange header m-inline-block m-text-thin" th:text="${page.totalElements}">
+                                14</h2>篇
+                        </div>
+                    </div>
+                </div>
+                <!--博客列表具体内容-->
+                <div class="ui attached segment">
+                    <!--每一篇博客-->
+                    <div class="ui padded vertical segment m-padded-tb-large" th:each="blog : ${page.content}">
+                        <div class="ui middle aligned mobile reversed stackable grid">
+                            <div class="eleven wide column">
+                                <h3 class="ui header"><a href="#" th:href="@{/blog/{id}(id=${blog.id})}"
+                                                         target="_blank" class="m-black" th:text="${blog.title}">欢迎来到康宁的博客！</a>
+                                </h3>
+                                <p class="m-text" th:text="|${blog.description}......|">
+                                    今天老师讲了科学哲学方面的知识，其中包括了波普尔的科学哲学思想。波普尔的哲学体系，重点在于批判的理性主义，这即与经典的经验主义是泾渭分明的。他认为，科学理论和人类所掌握到的一切知识，都不过是推测和假想，人在解决问题的过程中不可避免地掺入了想象力和创造性，好让问题能在一定的历史、文化框架中得到解答。</p>
+                                <div class="ui middle aligned grid">
+                                    <div class="eleven wide column">
+                                        <div class="ui small horizontal link list">
+                                            <div class="item">
+                                                <img src="../static/images/1005-100x100.jpg"
+                                                     th:src="@{${blog.user.avatar}}" alt="" class="ui avatar image">
+                                                <dic class="content">
+                                                    <a href="#"  target="_blank" class="m-black m-text" th:text="${blog.user.nickname}">康宁</a>
+                                                </dic>
+                                            </div>
+                                            <div class="item">
+                                                <i class="calendar alternate outline icon"></i>
+                                                <span th:text="${#dates.format(blog.updateTime,'yyyy-MM-dd')}">2017-10-01</span>
+                                            </div>
+                                            <div class="item">
+                                                <i class="eye icon"></i>
+                                                <span th:text="${blog.views}">2222</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="right aligned five wide column">
+                                        <a href="#" class="ui label teal m-padded-tiny m-text-thin"
+                                           th:text="${blog.category.name}" target="_blank">唯物主义</a>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="five wide column">
+                                <a href="#" th:href="@{/blog/{id}(id=${blog.id})}" target="_blank">
+                                    <!--800*400-->
+                                    <img src="../static/images/1005-800x450.jpg" th:src="@{${blog.firstPicture}}"
+                                         alt=""
+                                         class="ui rounded image">
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!--翻页按钮-->
+                <div class="ui bottom attached segment" th:if="${page.totalPages}>1">
+                    <div class="ui middle aligned two column grid">
+                        <div class="column">
+                            <a href="#" th:href="@{/admin/tags(page=${page.number}-1)}" th:unless="${page.first}"
+                               class="ui mini teal basic button">上一页</a>
+                        </div>
+                        <div class="right aligned column">
+                            <a href="#" th:href="@{/admin/tags(page=${page.number}+1)}" th:unless="${page.last}"
+                               class="ui mini teal basic button">下一页</a>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+            <!--右边卡片部分-->
+            <div class="five wide column">
+                <!--分类卡片-->
+                <div class="ui segments">
+                    <!--分类卡片顶部-->
+                    <!--这里的secondary是把底色变为灰色-->
+                    <div class="ui secondary segment">
+                        <div class="ui two column grid">
+                            <div class="column">
+                                <i class="idea icon"></i>分类
+                            </div>
+                            <div class="right aligned column">
+                                <a href="#" target="_blank">more <i class="angle double right icon"></i></a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="ui teal segment m-container">
+                        <div class="ui fluid vertical menu">
+                            <a href="#" class="item" th:each="category : ${categories}">
+                                <span th:text="${category.name}">学习日志</span>
+                                <div class="ui teal basic left pointing label"
+                                     th:text="${#arrays.length(category.blogs)}">13
+                                </div>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                <!--标签卡片-->
+                <div class="ui segments">
+                    <!--标签卡片顶部-->
+                    <!--这里的secondary是把底色变为灰色-->
+                    <div class="ui secondary segment">
+                        <div class="ui two column grid">
+                            <div class="column">
+                                <i class="tags icon"></i>标签
+                            </div>
+                            <div class="right aligned column">
+                                <a href="#" target="_blank">more <i class="angle double right icon"></i></a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="ui teal segment">
+
+                        <a href="#" target="_blank" class="ui teal basic label m-margin-tb-mini"
+                           th:each="tag : ${tags}">
+                            <span th:text="${tag.name}">基础知识</span>
+                            <div class="detail" th:text="${#arrays.length(tag.blogs)}">23</div>
+                        </a>
+
+                    </div>
+                </div>
+                <!--最新推荐-->
+                <div class="ui segments">
+                    <!--推荐卡片顶部-->
+                    <!--这里的secondary是把底色变为灰色-->
+                    <div class="ui secondary segment">
+                        <div class="ui two column grid">
+                            <div class="column">
+                                <i class="bookmark icon"></i>最新推荐
+                            </div>
+                            <div class="right aligned column">
+                                <a href="#" target="_blank">more <i class="angle double right icon"></i></a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="ui segment" th:each="rblog : ${recommendBlogs}">
+                        <a href="#" th:href="@{/blog/{id}(id=${rblog.id})}" target="_blank" class="m-black"
+                           th:text="${rblog.title}">我的博客介绍</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+<footer th:replace="_fragment :: footer"></footer>
+<th:block th:replace="_fragment :: script"></th:block>
+<script>
+    $('.menu.toggle').click(function () {
+        $('.m-item').toggleClass('m-mobile-hide');
+    });
+</script>
+</body>
+
+</html>

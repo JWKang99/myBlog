@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+
+<head th:replace="_fragment :: head(~{::title})">
+    <title>标签</title>
+</head>
+
+<body>
+
+    <!--导航栏,ui表示ui组件,inverted颜色反转-->
+    <nav th:replace="_fragment :: menu(1)"></nav>
+    <!--中间内容-->
+    <div class="m-container-small m-padded-tb-big">
+        <!--semantic中的container有响应式效果，根据不同的屏幕尺寸达到最好的效果-->
+        <div class="ui container">
+            <!-- 头部 -->
+            <div class="ui top attached segment">
+                <div class="ui middle aligned two column grid">
+                    <div class="column">
+                        <h3 class="ui teal header">标签</h3>
+                    </div>
+                    <div class="right aligned column">
+                        共
+                        <h2 class="ui orange header m-inline-block m-text-thin">14</h2>个
+                    </div>
+                </div>
+            </div>
+            <div class="ui bottom attached segment m-padded-tb-large">
+                <a href="#" target="_blank" class="ui teal basic left pointing large label m-margin-tb-tiny">
+          基础知识 <div class="detail">23</div>
+        </a>
+                <a href="#" target="_blank" class="ui basic left pointing large label m-margin-tb-tiny">
+          java <div class="detail">23</div>
+        </a>
+                <a href="#" target="_blank" class="ui basic left pointing large label m-margin-tb-tiny">
+          设计模式 <div class="detail">23</div>
+        </a>
+                <a href="#" target="_blank" class="ui basic left pointing large label m-margin-tb-tiny">
+          唯物主义 <div class="detail">23</div>
+        </a>
+
+                <a href="#" target="_blank" class="ui basic left pointing large label m-margin-tb-tiny">
+          基础知识 <div class="detail">23</div>
+        </a>
+                <a href="#" target="_blank" class="ui basic left pointing large label m-margin-tb-tiny">
+          java <div class="detail">23</div>
+        </a>
+                <a href="#" target="_blank" class="ui basic left pointing large label m-margin-tb-tiny">
+          设计模式 <div class="detail">23</div>
+        </a>
+                <a href="#" target="_blank" class="ui basic left pointing large label m-margin-tb-tiny">
+          唯物主义 <div class="detail">23</div>
+        </a>
+                <br>
+                <br>
+                <br>
+                <br>
+                <br>
+                <br>
+                <br>
+                <br>
+            </div>
+        </div>
+
+        <div class="ui teal top attached segment">
+            <div class="ui m-padded-lr-responsive vertical segment m-padded-tb-large">
+                <div class="ui middle aligned mobile reversed stackable grid">
+                    <div class="eleven wide column">
+                        <h3 class="ui header">欢迎来到康宁的博客！</h3>
+                        <p class="m-text">
+                            今天老师讲了科学哲学方面的知识，其中包括了波普尔的科学哲学思想。波普尔的哲学体系，重点在于批判的理性主义，这即与经典的经验主义是泾渭分明的。他认为，科学理论和人类所掌握到的一切知识，都不过是推测和假想，人在解决问题的过程中不可避免地掺入了想象力和创造性，好让问题能在一定的历史、文化框架中得到解答。
+                        </p>
+                        <div class="ui middle aligned stackable grid">
+                            <div class="row">
+                                <div class="eleven wide column">
+                                    <div class="ui small horizontal link list">
+                                        <div class="item">
+                                            <img src="../static/images/1005-100x100.jpg" alt="" class="ui avatar image">
+                                            <dic class="content">
+                                                <a href="#" class="header">康宁</a>
+                                            </dic>
+                                        </div>
+                                        <div class="item">
+                                            <i class="calendar alternate outline icon"></i>2017-10-01
+                                        </div>
+                                        <div class="item">
+                                            <i class="eye icon"></i>2222
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="right aligned five wide column">
+                                    <a href="#" class="ui label teal m-padded-tiny m-text-thin" target="_blank">唯物主义</a>
+                                </div>
+                            </div>
+                            <div class="row m-padded-tb-mini">
+                                <div class="column ">
+                                    <a href="#" class="ui basic teal left pointing label m-text-thin m-padded-tiny">基础知识</a>
+                                </div>
+                            </div>
+
+
+                        </div>
+                    </div>
+                    <div class="five wide column">
+                        <a href="#" target="_blank">
+                            <!--800*400-->
+                            <img src="../static/images/1005-800x450.jpg" alt="" class="ui rounded image">
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <div class="ui m-padded-lr-responsive vertical segment m-padded-tb-large">
+                <div class="ui middle aligned mobile reversed stackable grid">
+                    <div class="eleven wide column">
+                        <h3 class="ui header">欢迎来到康宁的博客！</h3>
+                        <p class="m-text">
+                            今天老师讲了科学哲学方面的知识，其中包括了波普尔的科学哲学思想。波普尔的哲学体系，重点在于批判的理性主义，这即与经典的经验主义是泾渭分明的。他认为，科学理论和人类所掌握到的一切知识，都不过是推测和假想，人在解决问题的过程中不可避免地掺入了想象力和创造性，好让问题能在一定的历史、文化框架中得到解答。
+                        </p>
+                        <div class="ui middle aligned stackable grid">
+                            <div class="row">
+                                <div class="eleven wide column">
+                                    <div class="ui small horizontal link list">
+                                        <div class="item">
+                                            <img src="../static/images/1005-100x100.jpg" alt="" class="ui avatar image">
+                                            <dic class="content">
+                                                <a href="#" class="header">康宁</a>
+                                            </dic>
+                                        </div>
+                                        <div class="item">
+                                            <i class="calendar alternate outline icon"></i>2017-10-01
+                                        </div>
+                                        <div class="item">
+                                            <i class="eye icon"></i>2222
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="right aligned five wide column">
+                                    <a href="#" class="ui label teal m-padded-tiny m-text-thin" target="_blank">唯物主义</a>
+                                </div>
+                            </div>
+                            <div class="row m-padded-tb-mini">
+                                <div class="column ">
+                                    <a href="#" class="ui basic teal left pointing label m-text-thin m-padded-tiny">基础知识</a>
+                                </div>
+                            </div>
+
+
+                        </div>
+                    </div>
+                    <div class="five wide column">
+                        <a href="#" target="_blank">
+                            <!--800*400-->
+                            <img src="../static/images/1005-800x450.jpg" alt="" class="ui rounded image">
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <div class="ui m-padded-lr-responsive vertical segment m-padded-tb-large">
+                <div class="ui middle aligned mobile reversed stackable grid">
+                    <div class="eleven wide column">
+                        <h3 class="ui header">欢迎来到康宁的博客！</h3>
+                        <p class="m-text">
+                            今天老师讲了科学哲学方面的知识，其中包括了波普尔的科学哲学思想。波普尔的哲学体系，重点在于批判的理性主义，这即与经典的经验主义是泾渭分明的。他认为，科学理论和人类所掌握到的一切知识，都不过是推测和假想，人在解决问题的过程中不可避免地掺入了想象力和创造性，好让问题能在一定的历史、文化框架中得到解答。
+                        </p>
+                        <div class="ui middle aligned stackable grid">
+                            <div class="row">
+                                <div class="eleven wide column">
+                                    <div class="ui small horizontal link list">
+                                        <div class="item">
+                                            <img src="../static/images/1005-100x100.jpg" alt="" class="ui avatar image">
+                                            <dic class="content">
+                                                <a href="#" class="header">康宁</a>
+                                            </dic>
+                                        </div>
+                                        <div class="item">
+                                            <i class="calendar alternate outline icon"></i>2017-10-01
+                                        </div>
+                                        <div class="item">
+                                            <i class="eye icon"></i>2222
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="right aligned five wide column">
+                                    <a href="#" class="ui label teal m-padded-tiny m-text-thin" target="_blank">唯物主义</a>
+                                </div>
+                            </div>
+                            <div class="row m-padded-tb-mini">
+                                <div class="column ">
+                                    <a href="#" class="ui basic teal left pointing label m-text-thin m-padded-tiny">基础知识</a>
+                                </div>
+                            </div>
+
+
+                        </div>
+                    </div>
+                    <div class="five wide column">
+                        <a href="#" target="_blank">
+                            <!--800*400-->
+                            <img src="../static/images/1005-800x450.jpg" alt="" class="ui rounded image">
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <div class="ui m-padded-lr-responsive vertical segment m-padded-tb-large">
+                <div class="ui middle aligned mobile reversed stackable grid">
+                    <div class="eleven wide column">
+                        <h3 class="ui header">欢迎来到康宁的博客！</h3>
+                        <p class="m-text">
+                            今天老师讲了科学哲学方面的知识，其中包括了波普尔的科学哲学思想。波普尔的哲学体系，重点在于批判的理性主义，这即与经典的经验主义是泾渭分明的。他认为，科学理论和人类所掌握到的一切知识，都不过是推测和假想，人在解决问题的过程中不可避免地掺入了想象力和创造性，好让问题能在一定的历史、文化框架中得到解答。
+                        </p>
+                        <div class="ui middle aligned stackable grid">
+                            <div class="row">
+                                <div class="eleven wide column">
+                                    <div class="ui small horizontal link list">
+                                        <div class="item">
+                                            <img src="../static/images/1005-100x100.jpg" alt="" class="ui avatar image">
+                                            <dic class="content">
+                                                <a href="#" class="header">康宁</a>
+                                            </dic>
+                                        </div>
+                                        <div class="item">
+                                            <i class="calendar alternate outline icon"></i>2017-10-01
+                                        </div>
+                                        <div class="item">
+                                            <i class="eye icon"></i>2222
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="right aligned five wide column">
+                                    <a href="#" class="ui label teal m-padded-tiny m-text-thin" target="_blank">唯物主义</a>
+                                </div>
+                            </div>
+                            <div class="row m-padded-tb-mini">
+                                <div class="column ">
+                                    <a href="#" class="ui basic teal left pointing label m-text-thin m-padded-tiny">基础知识</a>
+                                </div>
+                            </div>
+
+
+                        </div>
+                    </div>
+                    <div class="five wide column">
+                        <a href="#" target="_blank">
+                            <!--800*400-->
+                            <img src="../static/images/1005-800x450.jpg" alt="" class="ui rounded image">
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--翻页按钮-->
+        <div class="ui bottom attached segment">
+            <div class="ui middle aligned two column grid">
+                <div class="column">
+                    <a href="#" class="ui mini teal basic button">上一页</a>
+                </div>
+                <div class="right aligned column">
+                    <a href="#" class="ui mini teal basic button">下一页</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <footer th:replace="_fragment :: footer"></footer>
+    <th:block th:replace="_fragment :: script"></th:block>
+    <script>
+        $('.menu.toggle').click(function() {
+            $('.m-item').toggleClass('m-mobile-hide');
+        });
+    </script>
+</body>
+
+</html>

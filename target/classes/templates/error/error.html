@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head th:replace="_fragment :: head(~{::title})">
+    <meta charset="UTF-8">
+    <title>错误</title>
+</head>
+<body>
+<nav th:fragment="admin_menu(n)" class="ui inverted attached segment m-padded-tb-mini m-shadow-small">
+    <div class="ui container">
+        <!--导航菜单-->
+        <div class="ui inverted secondary stackable menu">
+            <h2 class="ui teal header item">错误</h2>
+        </div>
+    </div>
+</nav>
+    <div class="m-container-small m-padded-tb-big">
+        <div class="ui container">
+            <div class="ui error message">
+                <h1>发生错误了</h1>
+                <!-- th:remove="tag" 表示把html的标签移除   -->
+                <div th:utext="'Failed Request URL : '+${url}"></div>
+                <div th:utext="'Exception message : '+${exception.message}" ></div>
+                <!--    循环把堆栈信息输出到页面    -->
+                <li th:each="st : ${exception.stackTrace}">
+                    <span th:utext="${st}" ></span>
+                </li>
+            </div>
+        </div>
+
+
+    </div>
+
+</body>
+</html>
