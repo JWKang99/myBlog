@@ -16,7 +16,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import vo.BlogQuery;
+import com.kang.blog.vo.BlogQuery;
 
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
@@ -52,6 +52,8 @@ public class BlogServiceImpl implements BlogService {
         String html = MarkDownUtils.markdownToHtmlExtensions(content);
         //如果直接使用blog.setContent(content)的话，hibernate会直接操作数据库
         bTemp.setContent(html);
+        //更新浏览次数
+        blogRepository.updateViews(id);
         return bTemp;
     }
 

@@ -13,6 +13,7 @@ public class Comment {
     private String email;
     private String content;
     private String avatar;
+    private boolean adminComment;
     @Temporal(TemporalType.TIMESTAMP)
     private Date createTime;
 
@@ -96,6 +97,14 @@ public class Comment {
 
     public void setParentComment(Comment parentComment) {
         this.parentComment = parentComment;
+    }
+
+    public boolean isAdminComment() {
+        return adminComment;
+    }
+
+    public void setAdminComment(boolean adminComment) {
+        this.adminComment = adminComment;
     }
 
     @Override

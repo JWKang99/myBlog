@@ -1,11 +1,9 @@
 package com.kang.blog.web;
 
-import com.kang.blog.exception.NotFoundException;
-import com.kang.blog.po.Blog;
 import com.kang.blog.service.BlogService;
 import com.kang.blog.service.CategoryService;
+import com.kang.blog.service.CommentService;
 import com.kang.blog.service.TagService;
-import org.omg.CORBA.PRIVATE_MEMBER;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -14,10 +12,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import sun.dc.pr.PRError;
-import vo.BlogQuery;
 
 @Controller
 public class IndexController {
@@ -30,6 +25,9 @@ public class IndexController {
 
     @Autowired
     private TagService tagService;
+
+    @Autowired
+    private CommentService commentService;
 
     @GetMapping("/")
     public String index(@PageableDefault(size = 8,sort = {"updateTime"},direction = Sort.Direction.DESC)

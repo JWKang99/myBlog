@@ -1,4 +1,4 @@
-package vo;
+package com.kang.blog.vo;
 
 public class BlogQuery {
     private String title;
