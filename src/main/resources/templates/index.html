@@ -11,7 +11,7 @@
 <!--    class="ui inverted attached segment m-padded-tb-mini m-shadow-small"-->
 <nav th:replace="_fragment :: menu(1)"></nav>
 <!--主体栏-->
-<div class="m-container m-padded-tb-big animated fadeIn">
+    <div class="m-container m-padded-tb-big animated fadeIn">
     <!--semantic中的container有响应式效果，根据不同的屏幕尺寸达到最好的效果-->
     <div class="ui container m-container">
         <div class="ui stackable grid">
@@ -62,7 +62,7 @@
                                         </div>
                                     </div>
                                     <div class="right aligned five wide column">
-                                        <a href="#" class="ui label teal m-padded-tiny m-text-thin"
+                                        <a href="#" th:href="@{/categories/{id}(id=${blog.category.id})}" class="ui label teal m-padded-tiny m-text-thin"
                                            th:text="${blog.category.name}" target="_blank">唯物主义</a>
                                     </div>
                                 </div>
@@ -105,13 +105,13 @@
                                 <i class="idea icon"></i>分类
                             </div>
                             <div class="right aligned column">
-                                <a href="#" target="_blank">more <i class="angle double right icon"></i></a>
+                                <a href="#" th:href="@{/categories/-1}" target="_blank">more <i class="angle double right icon"></i></a>
                             </div>
                         </div>
                     </div>
                     <div class="ui teal segment m-container">
                         <div class="ui fluid vertical menu">
-                            <a href="#" class="item" th:each="category : ${categories}">
+                            <a href="#" th:href="@{/categories/{id}(id=${category.id})}" class="item" th:each="category : ${categories}">
                                 <span th:text="${category.name}">学习日志</span>
                                 <div class="ui teal basic left pointing label"
                                      th:text="${#arrays.length(category.blogs)}">13
@@ -130,13 +130,13 @@
                                 <i class="tags icon"></i>标签
                             </div>
                             <div class="right aligned column">
-                                <a href="#" target="_blank">more <i class="angle double right icon"></i></a>
+                                <a href="#" th:href="@{/tags/-1}" target="_blank">more <i class="angle double right icon"></i></a>
                             </div>
                         </div>
                     </div>
                     <div class="ui teal segment">
 
-                        <a href="#" target="_blank" class="ui teal basic label m-margin-tb-mini"
+                        <a href="#" th:href="@{/tags/{id}(id=${tag.id})}" target="_blank" class="ui teal basic label m-margin-tb-mini"
                            th:each="tag : ${tags}">
                             <span th:text="${tag.name}">基础知识</span>
                             <div class="detail" th:text="${#arrays.length(tag.blogs)}">23</div>
@@ -159,8 +159,8 @@
                         </div>
                     </div>
                     <div class="ui segment" th:each="rblog : ${recommendBlogs}">
-                        <a href="#" th:href="@{/blog/{id}(id=${rblog.id})}" target="_blank" class="m-black"
-                           th:text="${rblog.title}">我的博客介绍</a>
+                        <a href="#" th:href="@{/blog/{id}(id=${rblog.id})}" target="_blank" class="m-black">
+                            <span th:text="${rblog.title}">我的博客介绍</span></a>
                     </div>
                 </div>
             </div>

@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
 
 <head th:replace="_fragment :: head(~{::title})">
     <title>分类</title>
@@ -16,204 +16,104 @@
 
 <body>
 
-    <!--导航栏,ui表示ui组件,inverted颜色反转  class="ui inverted attached segment m-padded-tb-mini m-shadow-small"-->
-    <nav th:replace="_fragment :: menu(2)"></nav>
-    <!--中间内容-->
-    <div class="m-container-small m-padded-tb-big">
-        <!--semantic中的container有响应式效果，根据不同的屏幕尺寸达到最好的效果-->
-        <div class="ui container">
-            <!-- 头部 -->
-            <div class="ui top attached segment">
-                <div class="ui middle aligned two column grid">
-                    <div class="column">
-                        <h3 class="ui teal header">分类</h3>
-                    </div>
-                    <div class="right aligned column">
-                        共
-                        <h2 class="ui orange header m-inline-block m-text-thin">14</h2>个
-                    </div>
+<!--导航栏,ui表示ui组件,inverted颜色反转  class="ui inverted attached segment m-padded-tb-mini m-shadow-small"-->
+<nav th:replace="_fragment :: menu(2)"></nav>
+<!--中间内容-->
+<div class="m-container-small m-padded-tb-big">
+    <!--semantic中的container有响应式效果，根据不同的屏幕尺寸达到最好的效果-->
+    <div class="ui container animated fadeIn">
+        <!-- 头部 -->
+        <div class="ui top attached segment">
+            <div class="ui middle aligned two column grid">
+                <div class="column">
+                    <h3 class="ui teal header">分类</h3>
+                </div>
+                <div class="right aligned column">
+                    共
+                    <h2 class="ui orange header m-inline-block m-text-thin" th:text="${#arrays.length(categories)}">
+                        14</h2>个
                 </div>
             </div>
-            <div class="ui bottom attached segment m-padded-tb-large">
-                <div class="ui labeled button m-margin-tb-tiny">
-                    <a href="#" class="ui basic teal button">java</a>
-                    <div class="ui basic teal left pointing label">14</div>
+        </div>
+        <div class="ui bottom attached segment m-padded-tb-large">
+            <div class="ui labeled button m-margin-tb-tiny" th:each="category : ${categories}">
+                <a href="#" th:href="@{/categories/{id}(id=${category.id})}" class="ui basic button"
+                   th:classappend="${category.id==activeCategoryId}?'teal'" th:text="${category.name}">java</a>
+                <div class="ui basic left pointing label" th:classappend="${category.id==activeCategoryId}?'teal'"
+                     th:text="${#arrays.length(category.blogs)}">14
                 </div>
-                <div class="ui labeled button m-margin-tb-tiny">
-                    <a href="#" class="ui basic teal button">基础知识</a>
-                    <div class="ui basic teal left pointing label">14</div>
-                </div>
-                <div class="ui labeled button m-margin-tb-tiny">
-                    <a href="#" class="ui basic teal button">设计模式实现</a>
-                    <div class="ui basic teal left pointing label">14</div>
-                </div>
-                <div class="ui labeled button m-margin-tb-tiny">
-                    <a href="#" class="ui basic teal button">数据库</a>
-                    <div class="ui basic teal left pointing label">14</div>
-                </div>
-                <div class="ui labeled button m-margin-tb-tiny">
-                    <a href="#" class="ui basic button">其他</a>
-                    <div class="ui basic left pointing label">14</div>
-                </div>
-                <div class="ui labeled button m-margin-tb-tiny">
-                    <a href="#" class="ui basic button">唯物主义</a>
-                    <div class="ui basic left pointing label">14</div>
-                </div>
-                <div class="ui labeled button m-margin-tb-tiny">
-                    <a href="#" class="ui basic button">SpringBoot</a>
-                    <div class="ui basic left pointing label">14</div>
-                </div>
-                <div class="ui labeled button m-margin-tb-tiny">
-                    <a href="#" class="ui basic button">技术篇</a>
-                    <div class="ui basic left pointing label">14</div>
-                </div>
-                <div class="ui labeled button m-margin-tb-tiny">
-                    <a href="#" class="ui basic button">生活篇</a>
-                    <div class="ui basic left pointing label">14</div>
-                </div>
-                <br>
-                <br>
-                <br>
-                <br>
-                <br>
-                <br>
-                <br>
-                <br>
             </div>
         </div>
 
         <div class="ui teal top attached segment">
-            <div class="ui m-padded-lr-responsive vertical segment m-padded-tb-large">
+            <div class="ui m-padded-lr-responsive vertical segment m-padded-tb-large" th:each="blog : ${page.content}">
                 <div class="ui middle aligned mobile reversed stackable grid">
                     <div class="eleven wide column">
-                        <h3 class="ui header">欢迎来到康宁的博客！</h3>
-                        <p class="m-text">
-                            今天老师讲了科学哲学方面的知识，其中包括了波普尔的科学哲学思想。波普尔的哲学体系，重点在于批判的理性主义，这即与经典的经验主义是泾渭分明的。他认为，科学理论和人类所掌握到的一切知识，都不过是推测和假想，人在解决问题的过程中不可避免地掺入了想象力和创造性，好让问题能在一定的历史、文化框架中得到解答。
-                        </p>
-                        <div class="ui middle aligned stackable grid">
+                        <h3 class="ui header"><a href="#" th:href="@{/blog/{id}(id=${blog.id})}"
+                                                 target="_blank" class="m-black" th:text="${blog.title}">博客标题</a>
+                        </h3>
+                        <p class="m-text" th:text="|${blog.description}......|">博客描述</p>
+                        <div class="ui middle aligned grid">
                             <div class="eleven wide column">
                                 <div class="ui small horizontal link list">
                                     <div class="item">
-                                        <img src="../static/images/1005-100x100.jpg" alt="" class="ui avatar image">
+                                        <img src="../static/images/1005-100x100.jpg"
+                                             th:src="@{${blog.user.avatar}}" alt="" class="ui avatar image">
                                         <dic class="content">
-                                            <a href="#" class="header">康宁</a>
+                                            <a href="#" target="_blank" class="m-black m-text"
+                                               th:text="${blog.user.nickname}">作者昵称</a>
                                         </dic>
                                     </div>
                                     <div class="item">
-                                        <i class="calendar alternate outline icon"></i>2017-10-01
+                                        <i class="calendar alternate outline icon"></i>
+                                        <span th:text="${#dates.format(blog.updateTime,'yyyy-MM-dd')}">更新时间</span>
                                     </div>
                                     <div class="item">
-                                        <i class="eye icon"></i>2222
+                                        <i class="eye icon"></i>
+                                        <span th:text="${blog.views}">2222</span>
                                     </div>
                                 </div>
                             </div>
                             <div class="right aligned five wide column">
-                                <a href="#" class="ui label teal m-padded-tiny m-text-thin" target="_blank">唯物主义</a>
+                                <a href="#" class="ui label teal m-padded-tiny m-text-thin"
+                                   th:text="${blog.category.name}" target="_blank">博客分类</a>
                             </div>
                         </div>
                     </div>
                     <div class="five wide column">
-                        <a href="#" target="_blank">
-                            <!--800*400-->
-                            <img src="../static/images/1005-800x450.jpg" alt="" class="ui rounded image">
-                        </a>
-                    </div>
-                </div>
-            </div>
-            <div class="ui m-padded-lr-responsive vertical segment m-padded-tb-large">
-                <div class="ui middle aligned mobile reversed stackable grid">
-                    <div class="eleven wide column">
-                        <h3 class="ui header">欢迎来到康宁的博客！</h3>
-                        <p class="m-text">
-                            今天老师讲了科学哲学方面的知识，其中包括了波普尔的科学哲学思想。波普尔的哲学体系，重点在于批判的理性主义，这即与经典的经验主义是泾渭分明的。他认为，科学理论和人类所掌握到的一切知识，都不过是推测和假想，人在解决问题的过程中不可避免地掺入了想象力和创造性，好让问题能在一定的历史、文化框架中得到解答。
-                        </p>
-                        <div class="ui middle aligned stackable grid">
-                            <div class="eleven wide column">
-                                <div class="ui small horizontal link list">
-                                    <div class="item">
-                                        <img src="../static/images/1005-100x100.jpg" alt="" class="ui avatar image">
-                                        <dic class="content">
-                                            <a href="#" class="header">康宁</a>
-                                        </dic>
-                                    </div>
-                                    <div class="item">
-                                        <i class="calendar alternate outline icon"></i>2017-10-01
-                                    </div>
-                                    <div class="item">
-                                        <i class="eye icon"></i>2222
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="right aligned five wide column">
-                                <a href="#" class="ui label teal m-padded-tiny m-text-thin" target="_blank">唯物主义</a>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="five wide column">
-                        <a href="#" target="_blank">
-                            <!--800*400-->
-                            <img src="../static/images/1005-800x450.jpg" alt="" class="ui rounded image">
-                        </a>
-                    </div>
-                </div>
-            </div>
-            <div class="ui m-padded-lr-responsive vertical segment m-padded-tb-large">
-                <div class="ui middle aligned mobile reversed stackable grid">
-                    <div class="eleven wide column">
-                        <h3 class="ui header">欢迎来到康宁的博客！</h3>
-                        <p class="m-text">
-                            今天老师讲了科学哲学方面的知识，其中包括了波普尔的科学哲学思想。波普尔的哲学体系，重点在于批判的理性主义，这即与经典的经验主义是泾渭分明的。他认为，科学理论和人类所掌握到的一切知识，都不过是推测和假想，人在解决问题的过程中不可避免地掺入了想象力和创造性，好让问题能在一定的历史、文化框架中得到解答。
-                        </p>
-                        <div class="ui middle aligned stackable grid">
-                            <div class="eleven wide column">
-                                <div class="ui small horizontal link list">
-                                    <div class="item">
-                                        <img src="../static/images/1005-100x100.jpg" alt="" class="ui avatar image">
-                                        <dic class="content">
-                                            <a href="#" class="header">康宁</a>
-                                        </dic>
-                                    </div>
-                                    <div class="item">
-                                        <i class="calendar alternate outline icon"></i>2017-10-01
-                                    </div>
-                                    <div class="item">
-                                        <i class="eye icon"></i>2222
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="right aligned five wide column">
-                                <a href="#" class="ui label teal m-padded-tiny m-text-thin" target="_blank">唯物主义</a>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="five wide column">
-                        <a href="#" target="_blank">
-                            <!--800*400-->
-                            <img src="../static/images/1005-800x450.jpg" alt="" class="ui rounded image">
+                        <a href="#" th:href="@{/blog/{id}(id=${blog.id})}" target="_blank">
+                            <img src="../static/images/1005-800x450.jpg" th:src="@{${blog.firstPicture}}"
+                                 alt=""
+                                 class="ui rounded image">
                         </a>
                     </div>
                 </div>
             </div>
         </div>
         <!--翻页按钮-->
-        <div class="ui bottom attached segment">
+        <div class="ui bottom attached segment" th:if="${page.totalPages}>1">
             <div class="ui middle aligned two column grid">
                 <div class="column">
-                    <a href="#" class="ui mini teal basic button">上一页</a>
+                    <a href="#" th:href="@{/admin/tags(page=${page.number}-1)}" th:unless="${page.first}"
+                       class="ui mini teal basic button">上一页</a>
                 </div>
                 <div class="right aligned column">
-                    <a href="#" class="ui mini teal basic button">下一页</a>
+                    <a href="#" th:href="@{/admin/tags(page=${page.number}+1)}" th:unless="${page.last}"
+                       class="ui mini teal basic button">下一页</a>
                 </div>
             </div>
         </div>
     </div>
-    xmlns:th="http://www.w3.org/1999/xhtml"
-    <th:block th:replace="_fragment :: script"></th:block>
-    <script>
-        $('.menu.toggle').click(function() {
-            $('.m-item').toggleClass('m-mobile-hide');
-        });
-    </script>
+
+
+</div>
+
+<th:block th:replace="_fragment :: script"></th:block>
+<script>
+    $('.menu.toggle').click(function () {
+        $('.m-item').toggleClass('m-mobile-hide');
+    });
+</script>
 </body>
 
 </html>

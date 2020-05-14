@@ -33,7 +33,7 @@
 <body>
 
 <!--导航栏,ui表示ui组件,inverted颜色反转-->
-<nav th:replace="_fragment :: menu(1)"></nav>
+<nav th:replace="_fragment :: menu(0)"></nav>
 <!--中间内容-->
 <div id="body-container" class="m-container-small m-padded-tb-big animated fadeIn">
     <!--semantic中的container有响应式效果，根据不同的屏幕尺寸达到最好的效果-->
@@ -70,7 +70,7 @@
         <!--内容-->
         <div class="ui attached segment">
             <div class="ui right aligned basic segment">
-                <div class="ui orange basic label" th:text="${blog.flag}">原创</div>
+                <div class="ui orange basic label" th:text="${blog.flag}">原创标识</div>
             </div>
             <h1 class="ui center aligned header" th:text="${blog.title}">标题</h1>
             <div id="content" class="typo typo-selection m-padded-tb m-padded-lr-responsive js-toc-content"
@@ -94,34 +94,34 @@ h5,h6{font-size:1em;}
             </div>
             <!--文章标签-->
             <div class="m-padded-tb m-padded-lr-responsive">
-                <div class="ui basic teal left point label" th:each="tag : ${blog.tags}" th:text="${tag.name}">唯物主义
+                <div class="ui basic teal left point label" th:href="@{/tags/{id}(id=${tag.id})}"  th:each="tag : ${blog.tags}" th:text="${tag.name}">唯物主义
                 </div>
             </div>
             <!--赞赏-->
-            <div class="ui center aligned basic segment">
-                <button id="payBtn" class="ui orange basic circular button">赞赏</button>
-            </div>
-            <div class="ui payArea flowing popup transition hidden">
-                <div class="ui basic label">
-                    <div class="ui images" style="font-size: inherit;">
-                        <div class="image">
-                            <img src="../static/images/1005-100x100.jpg" th:src="@{/images/1005-100x100.jpg}" alt=""
-                                 class="ui  bordered image" style="width: 120px;">
-                            <div>支付宝</div>
-                        </div>
-                        <div class="image">
-                            <img src="../static/images/1005-100x100.jpg" th:src="@{/images/1005-100x100.jpg}" alt=""
-                                 class="ui rounded bordered image" style="width: 120px;">
-                            <div>微信</div>
+            <div th:if="${blog.appreciation}">
+                <div class="ui center aligned basic segment">
+                    <button id="payBtn" class="ui orange basic circular button">赞赏</button>
+                </div>
+                <div class="ui payArea flowing popup transition hidden">
+                    <div class="ui basic label">
+                        <div class="ui images" style="font-size: inherit;">
+                            <div class="image">
+                                <img src="../static/images/1005-100x100.jpg" th:src="@{/images/1005-100x100.jpg}" alt=""
+                                     class="ui  bordered image" style="width: 120px;">
+                                <div>支付宝</div>
+                            </div>
+                            <div class="image">
+                                <img src="../static/images/1005-100x100.jpg" th:src="@{/images/1005-100x100.jpg}" alt=""
+                                     class="ui rounded bordered image" style="width: 120px;">
+                                <div>微信</div>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
-
-
         </div>
         <!--博客信息-->
-        <div class="ui attached negitive message">
+        <div class="ui attached negitive message" th:if="${blog.shareStatement}">
             <ui class="list">
                 <li>作者: <a th:href="@{/about}" target="_blank" th:text="${blog.user.nickname}">name</a></li>
                 <!--                    <li>文章链接: <a href="" th:href="@{/blog/{id}(id=${blog.id})}" th:text=""></a></li>-->
@@ -129,7 +129,7 @@ h5,h6{font-size:1em;}
             </ui>
         </div>
         <!--留言区域-->
-        <div class="ui bottom attached segment">
+        <div class="ui bottom attached segment" th:if="${blog.commentable}">
             <!--留言区域列表-->
             <div id="comment-container" class="ui teal segment">
                 <div th:fragment="commentList">
@@ -317,7 +317,7 @@ h5,h6{font-size:1em;}
         popup: $('.QRArea.popup'),
         position: 'left center'
     });
-    const server = "http://localhost:8080";
+    const server = /*[[#{blog.serverUrl}]]*/"http://localhost:8080";
     const url = /*[[@{/blog/{id}(id=${blog.id})}]]*/"";
     const qrcode = new QRCode("qrcode", {
         text: server + url,

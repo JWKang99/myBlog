@@ -6,6 +6,7 @@ import org.springframework.data.domain.Pageable;
 import com.kang.blog.vo.BlogQuery;
 
 import java.util.List;
+import java.util.Map;
 
 public interface BlogService {
 
@@ -17,7 +18,13 @@ public interface BlogService {
 
     Page<Blog> listBlog(Pageable pageable);
 
+    Page<Blog> listBlog(Long tagId, Pageable pageable);
+
     Page<Blog> listBlog(String query, Pageable pageable);
+
+    Map<String, List<Blog>> archiveBlogs();
+
+    Long countBlog();
 
     Blog saveBlog(Blog blog);
 

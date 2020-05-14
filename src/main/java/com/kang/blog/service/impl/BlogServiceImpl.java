@@ -18,13 +18,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import com.kang.blog.vo.BlogQuery;
 
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Predicate;
-import javax.persistence.criteria.Root;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import javax.persistence.criteria.*;
+import java.util.*;
 
 
 @Service
@@ -97,8 +92,48 @@ public class BlogServiceImpl implements BlogService {
     }
 
     @Override
+    public Page<Blog> listBlog(Long tagId, Pageable pageable) {
+        return blogRepository.findAll(new Specification<Blog>() {
+            @Override
+            public Predicate toPredicate(Root<Blog> root, CriteriaQuery<?> criteriaQuery, CriteriaBuilder criteriaBuilder) {
+                //关联表查询
+                Join join = root.join("tags");
+                return criteriaBuilder.equal(join.get("id"),tagId);
+            }
+        },pageable);
+    }
+
+
+    /**
+     * 全局模糊搜索，查询标题和详情中的内容
+     * @param query 查询的内容
+     * @param pageable
+     * @return
+     */
+    @Override
     public Page<Blog> listBlog(String query, Pageable pageable) {
         return blogRepository.findByQuery(query,pageable);
+    }
+
+    @Override
+    @Transactional
+    public Map<String, List<Blog>> archiveBlogs() {
+        //获取所有博客的年份
+        List<String> years = blogRepository.findGroupYear();
+        for(String year : years){
+            System.out.println(year);
+        }
+        Map<String, List<Blog>> map = new HashMap<>();
+        for(String year : years){
+            List<Blog> blogs = blogRepository.findByYear(year);
+            map.put(year,blogs);
+        }
+        return map;
+    }
+
+    @Override
+    public Long countBlog() {
+        return blogRepository.count();
     }
 
     @Override
