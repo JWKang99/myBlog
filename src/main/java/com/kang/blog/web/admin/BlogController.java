@@ -3,7 +3,6 @@ package com.kang.blog.web.admin;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.kang.blog.entity.Blog;
-import com.kang.blog.entity.Tag;
 import com.kang.blog.entity.User;
 import com.kang.blog.service.BlogService;
 import com.kang.blog.service.CategoryService;
@@ -13,7 +12,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-import com.kang.blog.entity.BlogQuery;
 
 import javax.servlet.http.HttpSession;
 import java.util.List;
@@ -39,7 +37,7 @@ public class BlogController {
 
     //后台管理博客列表
     @GetMapping("/blogs")
-    public String list(@RequestParam(required = false, defaultValue = "1", value = "page")int page, BlogQuery blog, Model model){
+    public String list(@RequestParam(required = false, defaultValue = "1", value = "page")int page, Model model){
         PageHelper.startPage(page,8);
         List<Blog> blogList = blogService.getAllBlogs();
         PageInfo<Blog> blogs = new PageInfo<>(blogList);
