@@ -1,26 +1,23 @@
 package com.kang.blog.service;
 
-import com.kang.blog.po.Category;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
+import com.kang.blog.entity.Category;
 
 import java.util.List;
 
 public interface CategoryService {
 
-    Category saveCategory(Category category);
+    int saveCategory(Category category);
 
     Category getCategory(Long id);
 
     Category getCategoryByName(String name);
 
-    Page<Category> listCategory(Pageable pageable);
+    List<Category> getAllCategories();
 
-    Category updateCategory(Long id, Category category);
+    List<Category> getIndexCategories();
 
-    void deleteCategory(Long id);
+    int updateCategory(Category category);
 
-    List<Category> listCategory();
+    int deleteCategory(Long id);
 
-    List<Category> listCategoryTop(Integer size);
 }

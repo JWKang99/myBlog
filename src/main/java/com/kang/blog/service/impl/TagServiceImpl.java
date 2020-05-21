@@ -1,19 +1,14 @@
 package com.kang.blog.service.impl;
 
-import com.kang.blog.dao.CategoryRepository;
-import com.kang.blog.dao.TagRepository;
+import com.kang.blog.dao.TagMapper;
 import com.kang.blog.exception.NotFoundException;
-import com.kang.blog.po.Category;
-import com.kang.blog.po.Tag;
+import com.kang.blog.entity.Tag;
 import com.kang.blog.service.TagService;
+import com.kang.blog.utils.String2List;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
+
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,75 +18,56 @@ import java.util.List;
 public class TagServiceImpl implements TagService {
 
     @Autowired
-    TagRepository tagRepository;
+    TagMapper tagMapper;
+
     @Override
-    @Transactional
-    public Tag saveTag(Tag tag) {
-        return tagRepository.save(tag);
+    public int saveTag(Tag tag) {
+        return tagMapper.saveTag(tag);
     }
 
     @Override
-    @Transactional
     public Tag getTag(Long id) {
-        return tagRepository.findById(id).get();
+        return tagMapper.findTagById(id);
     }
 
     @Override
-    @Transactional
-    public Page<Tag> listTag(Pageable pageable) {
-        return tagRepository.findAll(pageable);
+    public List<Tag> getAllTags() {
+        return tagMapper.findAllTags();
     }
 
-
     @Override
-    @Transactional
-    public Tag updateTag(Long id, Tag tag) {
-        Tag findRes = tagRepository.getOne(id);
+    public int updateTag(Long id, Tag tag) {
+        Tag findRes = tagMapper.findTagById(id);
         if(findRes == null){
             throw new NotFoundException("该类型不存在");
         }
         BeanUtils.copyProperties(tag,findRes);
-        return tagRepository.save(findRes);
+        return tagMapper.updateTag(findRes);
     }
 
     @Override
-    @Transactional
     public void deleteTag(Long id) {
-        tagRepository.deleteById(id);
-    }
-
-    @Override
-    public List<Tag> listTag() {
-        return tagRepository.findAll();
+        tagMapper.deleteTag(id);
     }
 
     @Override
     public List<Tag> listTag(String ids) {
-        return tagRepository.findAllById(convertToList(ids));
-    }
-
-    @Override
-    public List<Tag> listTagTop(Integer size) {
-        //按照tag对象的属性blogs.size降序
-        Sort sort = Sort.by(Sort.Order.desc( "blogs.size"));
-        Pageable pageable = PageRequest.of(0, size, sort);
-        return tagRepository.findTop(pageable);
-    }
-
-    private List<Long> convertToList(String ids){
-        List<Long> list = new ArrayList<>();
-        if(!"".equals(ids) && ids!=null){
-            String[] idArray = ids.split(",");
-            for(int i=0;i<idArray.length;i++){
-                list.add(new Long(idArray[i]));
-            }
+        List<Long> longs = String2List.convertToList(ids);
+        List<Tag> tags = new ArrayList<>();
+        for(Long id : longs){
+            tags.add(getTag(id));
         }
-        return list;
+        return tags;
     }
 
     @Override
     public Tag getTagByName(String name) {
-        return tagRepository.findByName(name);
+        return tagMapper.findTagByName(name);
+    }
+
+    @Override
+    public List<Tag> getIndexTags() {
+        return tagMapper.getIndexTags();
     }
 
 }

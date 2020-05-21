@@ -1,7 +1,7 @@
 package com.kang.blog.web;
 
-import com.kang.blog.po.Comment;
-import com.kang.blog.po.User;
+import com.kang.blog.entity.Comment;
+import com.kang.blog.entity.User;
 import com.kang.blog.service.BlogService;
 import com.kang.blog.service.CommentService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,10 +32,10 @@ public class CommentController {
         return "blog :: commentList";
     }
 
-
     @PostMapping("/comments")
     public String post (Comment comment, HttpSession session){
         Long blogId = comment.getBlog().getId();
+        comment.setBlogId(blogId);
         comment.setBlog(blogService.getBlog(blogId));
         User user = (User) session.getAttribute("user");
         if(user!=null){
@@ -45,6 +45,8 @@ public class CommentController {
         }else{
             comment.setAvatar(avatar);
         }
+        System.out.println("=========");
+        System.out.println(comment);
         commentService.saveComment(comment);
         return "redirect:/comments/"+comment.getBlog().getId();
     }

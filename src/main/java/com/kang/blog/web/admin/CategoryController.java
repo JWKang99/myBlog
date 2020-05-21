@@ -1,32 +1,36 @@
 package com.kang.blog.web.admin;
 
 
-import com.kang.blog.po.Category;
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
+import com.kang.blog.entity.Category;
 import com.kang.blog.service.CategoryService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
-import org.springframework.data.web.PageableDefault;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.validation.Valid;
+import java.util.List;
 
 @Controller
 @RequestMapping("/admin")
 public class CategoryController {
+
     @Autowired
     private CategoryService categoryService;
+
     @GetMapping("/categories")
-    public String getCategories(@PageableDefault(size = 10,sort = {"id"},direction = Sort.Direction.DESC)
-                                            Pageable pageable, Model model){
-        model.addAttribute("categoriesList",categoryService.listCategory(pageable));
+    public String getCategories(@RequestParam(required = false,defaultValue = "1",value = "page") int page, Model model){
+        List<Category> categories = categoryService.getAllCategories();
+
+        PageHelper.startPage(page,8);
+
+        PageInfo<Category> pageInfo = new PageInfo<>(categories);
+
+        model.addAttribute("categoriesList",pageInfo);
         return "admin/categories";
     }
     @GetMapping("/categories/input")
@@ -40,20 +44,20 @@ public class CategoryController {
      *  新增分类
      */
     @PostMapping("/categories")
-    public String postCategory(@Valid Category category, BindingResult result, RedirectAttributes attributes,Model model){
-        if(categoryService.getCategoryByName(category.getName())!=null){
-            result.rejectValue("name","nameError","该分类已存在");
+    public String postCategory(Category category, RedirectAttributes attributes){
+        Category c = categoryService.getCategoryByName(category.getName());
+        if(c!=null){
+            attributes.addFlashAttribute("message","该分类已存在");
+            return "redirect:/admin/categories/input";
         }
-        if(result.hasErrors()){
-            return "admin/category-publish";
-        }
-
-        Category reCategory = categoryService.saveCategory(category);
-        if(reCategory == null){
-            attributes.addFlashAttribute("message","新增失败");
-        }else{
+        int res = categoryService.saveCategory(category);
+        if(res>0){
             attributes.addFlashAttribute("message","新增成功");
+        }else{
+            attributes.addFlashAttribute("message","新增失败");
         }
+        //重定向之后会显示tag数据,因为经过了/admin/tags下的方法
+        //若直接定位admin/tags直接返回html页面没经过数据查询
         return "redirect:/admin/categories";
     }
     @GetMapping("/categories/{id}/input")
@@ -76,19 +80,24 @@ public class CategoryController {
      *  编辑分类
      */
     @PostMapping("/categories/{id}")
-    public String editCategory(@Valid Category category, BindingResult result, @PathVariable Long id, RedirectAttributes attributes,Model model){
-        if(categoryService.getCategoryByName(category.getName())!=null){
-            result.rejectValue("name","nameError","该分类已存在");
+    public String editCategory(@Valid Category category, BindingResult result, @PathVariable Long id, RedirectAttributes attributes){
+        Category c = categoryService.getCategoryByName(category.getName());
+        if(c!=null){
+            attributes.addFlashAttribute("message","分类名称未改变");
+            return "redirect:/admin/categories/"+id+"/input";
         }
         if(result.hasErrors()){
             return "admin/category-publish";
         }
-        Category reCategory = categoryService.updateCategory(id,category);
-        if(reCategory == null){
-            attributes.addFlashAttribute("message","更新失败");
-        }else{
+
+        int res = categoryService.updateCategory(category);
+        if(res>0){
             attributes.addFlashAttribute("message","更新成功");
+        }else{
+            attributes.addFlashAttribute("message","更新失败");
         }
+        //重定向之后会显示tag数据,因为经过了/admin/tags下的方法
+        //若直接定位admin/tags直接返回html页面没经过数据查询
         return "redirect:/admin/categories";
     }
 

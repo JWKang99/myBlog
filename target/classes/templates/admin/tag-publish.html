@@ -31,11 +31,13 @@
         <div class="ui container">
             <form action="#" method="post" th:action="*{id}==null? @{/admin/tags}:@{/admin/tags/{id}(id=*{id})}" th:object="${tag}" class="ui form">
                 <input type="hidden" name="id" th:value="*{id}">
+                <!--  前端验证  -->
                 <div class="ui small error message"></div>
-                <div class="ui negative message" th:if="${#fields.hasErrors('name')}">
+                <!--  后端验证  -->
+                <div class="ui negative message" th:unless="${#strings.isEmpty(message)}">
                     <i class="close icon"></i>
                     <div class="header">提示:</div>
-                    <p th:errors="*{name}">提交信息不符合规则</p>
+                    <p th:text="${message}">提交信息不符合规则</p>
                 </div>
                 <div class="required field">
                     <div class="ui left labeled input">
@@ -61,41 +63,8 @@
 
 
     <!--底部栏,attached\vertical-->
-    <footer class="ui inverted attached segment m-padded-tb-massive">
-        <div class="ui center aligned container">
-            <div class="ui inverted divided stackable grid">
-                <div class="four wide column">
-                    <h4 class="ui inverted header m-text-spaced m-opacity-mini">最新博客</h4>
-                    <div class="ui inverted link list">
-                        <a href="#" class="item">用户故事(User Story)</a>
-                        <a href="#" class="item">用户故事(User Story)</a>
-                        <a href="#" class="item">用户故事(User Story)</a>
-                    </div>
-                </div>
-                <div class="five wide column">
-                    <h4 class="ui inverted header m-text-spaced m-opacity-mini">联系我</h4>
-                    <div class="ui inverted link list">
-                        <a href="#" class="item ">Email:kangjiawen1109@163.com</a>
-                        <a href="#" class="item">用户故事(User Story)</a>
-                        <a href="#" class="item">用户故事(User Story)</a>
-                    </div>
-                </div>
-                <div class="seven wide column">
-                    <h4 class="ui inverted header m-text-spaced m-opacity-mini">Blog</h4>
-                    <div class="ui inverted link list">
-                        <p class="m-opacity-mini">
-                            这是我的个人博客，会分享关于编程和生活方面的内容，同时也会记录自己学习的过程，希望可以给来到这的人和自己一点帮助...
-                        </p>
-                    </div>
-                </div>
-            </div>
-            <div class="ui inverted section divider"></div>
-            <p class="m-text-thin m-text-spaced m-opacity-tiny">Copyright ©2019 - 2020 AllenWho Designed By 康宁</p>
-        </div>
-    </footer>
+    <footer th:replace="admin/admin_fragment :: admin_footer" ></footer>
     <script src="https://apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js"></script>
-    <!--https://cdn.jsdelivr.net/npm/semantic-ui/2.4.2/semantic.min.js-->
-    <!--https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.js-->
     <script src="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.js"></script>
     <script>
         var contentEditor;

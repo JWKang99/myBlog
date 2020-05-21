@@ -1,28 +1,23 @@
 package com.kang.blog.service;
 
-import com.kang.blog.po.Category;
-import com.kang.blog.po.Tag;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
+import com.kang.blog.entity.Tag;
 
 import java.util.List;
 
 public interface TagService {
-    Tag saveTag(Tag tag);
+    int saveTag(Tag tag);
 
     Tag getTag(Long id);
 
     Tag getTagByName(String name);
 
-    Page<Tag> listTag(Pageable pageable);
+    List<Tag> getIndexTags();
 
-    Tag updateTag(Long id, Tag tag);
+    List<Tag> getAllTags();
+
+    int updateTag(Long id, Tag tag);
 
     void deleteTag(Long id);
 
-    List<Tag> listTag();
-
     List<Tag> listTag(String ids);
-
-    List<Tag> listTagTop(Integer size);
 }

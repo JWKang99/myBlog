@@ -35,23 +35,6 @@
                 <div class="header">提示:</div>
                 <p th:text="${message}">操作成功!</p>
             </div>
-<!--            <form action="#" method="post" th:action="@{/admin/categories}" class="ui new form">-->
-<!--                <div class="ui small error message"></div>-->
-
-<!--&lt;!&ndash;                <div class="ui negative message" th:if="${#fields.hasErrors('name')}">&ndash;&gt;-->
-<!--&lt;!&ndash;                    <i class="close icon"></i>&ndash;&gt;-->
-<!--&lt;!&ndash;                    <div class="header">提示:</div>&ndash;&gt;-->
-<!--&lt;!&ndash;                    <p th:errors="*{name}">提交信息不符合规则</p>&ndash;&gt;-->
-<!--&lt;!&ndash;                </div>&ndash;&gt;-->
-
-<!--                <div class="required field">-->
-<!--                    <div class="ui left labeled input">-->
-<!--                        <label class="ui compact teal basic label">名称</label>-->
-<!--                        <input type="text" name="name" placeholder="新增分类名称">-->
-<!--                        <button class="ui right floated teal basic submit button"><i class="edit outline icon"></i>新增</button>-->
-<!--                    </div>-->
-<!--                </div>-->
-<!--            </form>-->
             <a th:href="@{/admin/categories/input}" class="ui right floated teal basic submit button m-margin-bottom-small"><i class="edit outline icon"></i>新增</a>
             <table class="ui center aligned teal table">
                 <thead>
@@ -62,7 +45,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr th:each="category,iterStat: ${categoriesList.content}">
+                    <tr th:each="category,iterStat: ${categoriesList.list}">
                         <td th:text="${iterStat.count}">1</td>
                         <td th:text="${category.name}">java</td>
                         <td>
@@ -75,12 +58,13 @@
                 <tfoot>
                     <tr>
                         <th colspan="6" >
-                            <div class="ui center aligned tiny pagination menu" th:if="${categoriesList.totalPages}>1">
-                                <a th:href="@{/admin/categories(page=${categoriesList.number}-1)}" th:unless="${categoriesList.first}" class="icon item">
+                            <div class="ui center aligned tiny pagination menu">
+                                <a th:href="@{/admin/categories(page=${categoriesList.prePage})}" th:unless="${categoriesList.isFirstPage}" class="icon item">
                                     <i class="left chevron icon"></i>
                                 </a>
-                                <a class="item">1</a>
-                                <a th:href="@{/admin/categories(page=${categoriesList.number}+1)}" th:unless="${categoriesList.last}" class="icon item">
+                                <span class="item">第<span th:text="${categoriesList.pageNum}"></span>页</span>
+                                <span class="item">总<span th:text="${categoriesList.pages}"></span>页</span>
+                                <a th:href="@{/admin/categories(page=${categoriesList.nextPage})}" th:unless="${categoriesList.isLastPage}" class="icon item">
                                     <i class="right chevron icon"></i>
                                 </a>
                             </div>

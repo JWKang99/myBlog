@@ -29,6 +29,7 @@ public class LogAspect {
         String classMethod = joinPoint.getSignature().getDeclaringTypeName()+"."+joinPoint.getSignature().getName();
         Object[] args = joinPoint.getArgs();
         RequestLog requestLog = new RequestLog(url,ip,classMethod,args);
+        //输出请求信息
         logger.info("Request : {}", requestLog);
     }
     @After("log()")
@@ -39,6 +40,8 @@ public class LogAspect {
     public void doAfterReturn(Object result){
         logger.info("result : {}",result);
     }
+
+
     private class RequestLog {
         private String url;
         private String ip;

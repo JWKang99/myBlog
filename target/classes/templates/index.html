@@ -18,22 +18,24 @@
             <!--左边博客列表-->
             <div class="eleven wide column">
                 <!--博客列表顶部标识-->
-                <div class="ui top attached segment">
-                    <div class="ui middle aligned two column grid">
-                        <div class="column">
-                            <h3 class="ui teal header">博客</h3>
-                        </div>
-                        <div class="right aligned column">
-                            共
-                            <h2 class="ui orange header m-inline-block m-text-thin" th:text="${page.totalElements}">
-                                14</h2>篇
+                <div th:fragment="indexBlogs">
+                    <div class="ui top attached segment">
+                        <div class="ui middle aligned two column grid">
+                            <div class="column">
+                                <h3 class="ui teal header">博客</h3>
+                            </div>
+                            <div class="right aligned column">
+                                共
+                                <h2 class="ui orange header m-inline-block m-text-thin" th:text="${page.list.size()}">
+                                    14</h2>篇
+                            </div>
                         </div>
                     </div>
                 </div>
                 <!--博客列表具体内容-->
                 <div class="ui attached segment">
                     <!--每一篇博客-->
-                    <div class="ui padded vertical segment m-padded-tb-large" th:each="blog : ${page.content}">
+                    <div class="ui padded vertical segment m-padded-tb-large" th:each="blog : ${page.list}">
                         <div class="ui middle aligned mobile reversed stackable grid">
                             <div class="eleven wide column">
                                 <h3 class="ui header"><a href="#" th:href="@{/blog/{id}(id=${blog.id})}"
@@ -79,17 +81,12 @@
                     </div>
                 </div>
                 <!--翻页按钮-->
-                <div class="ui bottom attached segment" th:if="${page.totalPages}>1">
-                    <div class="ui middle aligned two column grid">
-                        <div class="column">
-                            <a href="#" th:href="@{/admin/tags(page=${page.number}-1)}" th:unless="${page.first}"
-                               class="ui mini teal basic button">上一页</a>
-                        </div>
-                        <div class="right aligned column">
-                            <a href="#" th:href="@{/admin/tags(page=${page.number}+1)}" th:unless="${page.last}"
-                               class="ui mini teal basic button">下一页</a>
-                        </div>
-
+                <div class="ui bottom attached segment center aligned">
+                    <div class="ui tiny pagination menu">
+                        <a class="item" href="#" th:href="@{/(page=${page.prePage})}" th:unless="${page.isFirstPage}">上一页</a>
+                        <span class="item">第<span th:text="${page.pageNum}"></span>页</span>
+                        <span class="item">总<span th:text="${page.pages}"></span>页</span>
+                        <a class="item" href="#" th:href="@{/(page=${page.nextPage})}" th:unless="${page.isLastPage}">下一页</a>
                     </div>
                 </div>
             </div>
@@ -111,7 +108,7 @@
                     </div>
                     <div class="ui teal segment m-container">
                         <div class="ui fluid vertical menu">
-                            <a href="#" th:href="@{/categories/{id}(id=${category.id})}" class="item" th:each="category : ${categories}">
+                            <a href="#" th:href="@{/categories/{id}(id=${category.id})}" th:if="${#arrays.length(category.blogs)>0}" class="item" th:each="category : ${categories}">
                                 <span th:text="${category.name}">学习日志</span>
                                 <div class="ui teal basic left pointing label"
                                      th:text="${#arrays.length(category.blogs)}">13

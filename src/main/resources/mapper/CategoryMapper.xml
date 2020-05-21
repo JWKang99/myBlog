@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kang.blog.dao.CategoryMapper">
+    <!--  给Category起别名  -->
+    <resultMap id="category" type="Category">
+        <id property="id" column="category_id"/>
+        <result property="name" column="name"/>
+        <collection property="blogs" ofType="Blog">
+            <id property="id" column="blog_id"/>
+            <result property="title" column="title"/>
+            <result property="categoryId" column="category_id"/>
+        </collection>
+    </resultMap>
+
+    <insert id="saveCategory" parameterType="Category">
+        insert into blog.t_category values (#{id},#{name})
+    </insert>
+
+    <update id="updateCategory" parameterType="Category">
+        update blog.t_category set name = #{name} where id = #{id}
+    </update>
+
+    <delete id="deleteById">
+        DELETE FROM blog.t_category c WHERE c.id =#{id}
+    </delete>
+
+    <select id="findByName" resultMap="category">
+        select * from blog.t_category where name = #{name}
+    </select>
+
+
+
+    <select id="findById" resultType="Category">
+        SELECT * FROM blog.t_category where id=#{id}
+    </select>
+
+    <select id="findAllCategories" resultType="Category">
+        SELECT * FROM blog.t_category
+    </select>
+
+    <!--  首页展示分类需直到博客数量,故联合blog表,保存blog的属性  -->
+    <select id="getIndexCategories" resultMap="category">
+        select c.id as category_id, c.name, b.id blog_id
+        from blog.t_category c, blog.t_blog b
+        where c.id = b.category_id
+    </select>
+
+</mapper>

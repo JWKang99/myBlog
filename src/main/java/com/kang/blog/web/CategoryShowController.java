@@ -1,18 +1,18 @@
 package com.kang.blog.web;
 
 
-import com.kang.blog.po.Category;
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
+import com.kang.blog.entity.Blog;
+import com.kang.blog.entity.Category;
 import com.kang.blog.service.BlogService;
 import com.kang.blog.service.CategoryService;
-import com.kang.blog.vo.BlogQuery;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
-import org.springframework.data.web.PageableDefault;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
 
@@ -26,18 +26,19 @@ public class CategoryShowController {
     private BlogService blogService;
 
     @GetMapping("/categories/{id}")
-    public String categories(@PageableDefault(size = 8,sort = {"updateTime"},direction = Sort.Direction.DESC)
-                                         Pageable pageable, Model model,
+    public String categories(@RequestParam(required = false,defaultValue = "1",value = "page")int page, Model model,
                              @PathVariable Long id){
-        List<Category> categories = categoryService.listCategoryTop(10000);
+        PageHelper.startPage(page,8);
+        List<Category> categories = categoryService.getIndexCategories();
         if(id==-1){
             //从导航栏进入分类页
             id = categories.get(0).getId();
         }
-        BlogQuery blogQuery = new BlogQuery();
-        blogQuery.setCategoryId(id);
+        List<Blog> blogs = blogService.getByCategoryId(id);
+        PageInfo<Blog> pageInfo = new PageInfo<>(blogs);
+        model.addAttribute("page",pageInfo);
         model.addAttribute("categories",categories);
-        model.addAttribute("page",blogService.listBlog(pageable,blogQuery));
+        //model.addAttribute("page",blogService.listBlog(pageable,blogQuery));
         model.addAttribute("activeCategoryId",id);
         return "categories";
     }

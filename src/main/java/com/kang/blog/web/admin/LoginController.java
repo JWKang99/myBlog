@@ -1,6 +1,6 @@
 package com.kang.blog.web.admin;
 
-import com.kang.blog.po.User;
+import com.kang.blog.entity.User;
 import com.kang.blog.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;

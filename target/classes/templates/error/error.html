@@ -13,22 +13,27 @@
         </div>
     </div>
 </nav>
-    <div class="m-container-small m-padded-tb-big">
-        <div class="ui container">
-            <div class="ui error message">
-                <h1>发生错误了</h1>
-                <!-- th:remove="tag" 表示把html的标签移除   -->
-                <div th:utext="'Failed Request URL : '+${url}"></div>
-                <div th:utext="'Exception message : '+${exception.message}" ></div>
-                <!--    循环把堆栈信息输出到页面    -->
-                <li th:each="st : ${exception.stackTrace}">
-                    <span th:utext="${st}" ></span>
-                </li>
-            </div>
+
+<div class="m-container-small m-padded-tb-big">
+    <br>
+    <br>
+    <div class="ui container">
+        <div class="ui error message m-padded-tb-huge">
+            <h1>发生错误了</h1>
+            <p>请联系管理员</p>
+            <!--/*-->
+            <!-- th:remove="tag" 表示把html的标签移除   -->
+            <div th:utext="'Failed Request URL : '+${url}"></div>
+            <div th:utext="'Exception message : '+${exception.message}"></div>
+            <!--    循环把堆栈信息输出到页面    -->
+            <li th:each="st : ${exception.stackTrace}">
+                <span th:utext="${st}"></span>
+            </li>
+            <!--*/-->
         </div>
-
-
     </div>
+</div>
+<!--*/-->
 
 </body>
 </html>

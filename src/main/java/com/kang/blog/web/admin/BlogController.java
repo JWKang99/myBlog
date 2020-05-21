@@ -1,34 +1,27 @@
 package com.kang.blog.web.admin;
 
-import com.kang.blog.po.Blog;
-import com.kang.blog.po.User;
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
+import com.kang.blog.entity.Blog;
+import com.kang.blog.entity.Tag;
+import com.kang.blog.entity.User;
 import com.kang.blog.service.BlogService;
 import com.kang.blog.service.CategoryService;
 import com.kang.blog.service.TagService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
-import org.springframework.data.web.PageableDefault;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-import com.kang.blog.vo.BlogQuery;
+import com.kang.blog.entity.BlogQuery;
 
 import javax.servlet.http.HttpSession;
+import java.util.List;
 
 
 @Controller
 @RequestMapping("/admin")
 public class BlogController {
-
-    private static final String INPUT = "admin/blogs-publish";
-    private static final String LIST = "admin/blogs";
-    private static final String REDIRECT_LIST = "redirect:/admin/blogs";
-
 
     @Autowired
     private BlogService blogService;
@@ -39,70 +32,83 @@ public class BlogController {
     @Autowired
     private CategoryService categoryService;
 
-    @GetMapping("/blogs")
-    public String list(@PageableDefault(size = 8,sort = {"updateTime"},direction = Sort.Direction.DESC)
-                                   Pageable pageable, BlogQuery blog, Model model){
-        model.addAttribute("categories",categoryService.listCategory());
-        model.addAttribute("blogs",blogService.listBlog(pageable,blog));
-        return LIST;
+    private void setCategoryAndTag(Model model){
+        model.addAttribute("categories",categoryService.getAllCategories());
+        model.addAttribute("tags",tagService.getAllTags());
     }
+
+    //后台管理博客列表
+    @GetMapping("/blogs")
+    public String list(@RequestParam(required = false, defaultValue = "1", value = "page")int page, BlogQuery blog, Model model){
+        PageHelper.startPage(page,8);
+        List<Blog> blogList = blogService.getAllBlogs();
+        PageInfo<Blog> blogs = new PageInfo<>(blogList);
+        model.addAttribute("blogs",blogs);
+        //此处需要获取类型列表，筛选所需
+        setCategoryAndTag(model);
+        return "admin/blogs";
+    }
+
+    //后台管理条件搜索博客
     @PostMapping("/blogs/search")
-    public String search(@PageableDefault(size = 8,sort = {"updateTime"},direction = Sort.Direction.DESC) Pageable pageable,
-                         BlogQuery blog,
-                         Model model){
-        model.addAttribute("blogs",blogService.listBlog(pageable,blog));
+    public String search(@RequestParam(required = false,defaultValue = "1",value = "page")int page, Blog blog, Model model){
+        System.out.println(blog);
+        List<Blog> blogList = blogService.getSearchAdminBlog(blog);
+        PageHelper.startPage(page,8);
+        PageInfo<Blog> blogs = new PageInfo<>(blogList);
+        model.addAttribute("blogs",blogs);
         //返回一个片段
         return "admin/blogs::bloglist";
     }
 
-    private void setCategoryAndTag(Model model){
-        model.addAttribute("categories",categoryService.listCategory());
-        model.addAttribute("tags",tagService.listTag());
-    }
-
+    //新增博客
     @GetMapping("/blogs/input")
     public String input(Model model){
         setCategoryAndTag(model);
         model.addAttribute("blog",new Blog());
-        return INPUT;
+        return "admin/blogs-publish";
     }
 
+    //编辑博客
     @GetMapping("/blogs/{id}/input")
     public String input(@PathVariable Long id, Model model){
         setCategoryAndTag(model);
-        //数据库blog表中没有存储tagsId字段，需要处理
+        //拿到博客详情对象在前端显示出来,markdown未转换
         Blog blog = blogService.getBlog(id);
-        blog.init();
+        blog.init();    //将tags集合转换为tagIds字符串,前端识别字符串1,2,3
         System.out.println(blog);
         model.addAttribute("blog",blog);
-        return INPUT;
+        return "admin/blogs-publish";
     }
 
 
 
     /**
-     *  新增和修改共用一个方法
+     *  新增和修改共用一个post方法
      */
     @PostMapping("/blogs/input")
     public String input(Blog blog, HttpSession session,RedirectAttributes attributes){
         blog.setUser((User)session.getAttribute("user"));
+        blog.setUserId(blog.getUser().getId());
+
         //blog.getCategory().getId()对应页面中的category.id
         blog.setCategory(categoryService.getCategory(blog.getCategory().getId()));
+        blog.setCategoryId(blog.getCategory().getId());
+
+        //把前端的标签数据[1,2,3]转换为标签列表存到blog对象中
         blog.setTags(tagService.listTag(blog.getTagIds()));
-        Blog saveRes;
+
         if(blog.getId()==null){
             System.out.println("进入新发布");
-            saveRes = blogService.saveBlog(blog);
+            blogService.saveBlog(blog);
+            attributes.addFlashAttribute("message","新增成功");
         }else{
             System.out.println("进入更新");
-            saveRes = blogService.updateBlog(blog.getId(),blog);
+            blogService.updateBlog(blog);
+            attributes.addFlashAttribute("message","更新成功");
         }
-        if(saveRes==null){
-            attributes.addFlashAttribute("message","操作失败");
-        }else{
-            attributes.addFlashAttribute("message","操作成功");
-        }
-        return REDIRECT_LIST;
+
+        return "redirect:/admin/blogs";
     }
 
 
@@ -110,6 +116,6 @@ public class BlogController {
     public String delete(@PathVariable Long id,RedirectAttributes attributes){
         blogService.deleteBlog(id);
         attributes.addFlashAttribute("message","删除成功");
-        return REDIRECT_LIST;
+        return "redirect:/admin/blogs";
     }
 }
