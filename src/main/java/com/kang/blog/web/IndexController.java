@@ -34,14 +34,14 @@ public class IndexController {
     private CommentService commentService;
 
     @GetMapping("/")
-    public String index(@RequestParam(required = false,defaultValue = "1",value = "page") int page, Model model){
+    public String index(@RequestParam(required = false,defaultValue = "1",value = "page") int page,Model model){
         PageHelper.startPage(page,8);
         List<Blog> blogList = blogService.getIndexBlog();
+        PageInfo<Blog> blogs = new PageInfo<Blog>(blogList);
+        model.addAttribute("page",blogs);
         List<Tag> tagList = tagService.getIndexTags();
         List<Category> categoryList = categoryService.getIndexCategories();
         List<Blog> recommendList = blogService.getRecommendBlogs(4);
-        PageInfo<Blog> blogs = new PageInfo<Blog>(blogList);
-        model.addAttribute("page",blogs);
         model.addAttribute("categories",categoryList);
         model.addAttribute("tags",tagList);
         model.addAttribute("recommendBlogs",recommendList);
@@ -49,7 +49,11 @@ public class IndexController {
     }
 
     @GetMapping("/indexBlogs")
-    public String indexBlogs(){
+    public String indexBlogs(@RequestParam(required = false,defaultValue = "1",value = "page") int page, Model model){
+        PageHelper.startPage(page,8);
+        List<Blog> blogList = blogService.getIndexBlog();
+        PageInfo<Blog> blogs = new PageInfo<Blog>(blogList);
+        model.addAttribute("page",blogs);
         return "index :: indexBlogs";
     }
 

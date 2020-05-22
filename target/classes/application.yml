@@ -2,6 +2,7 @@ spring:
   thymeleaf:
     mode: HTML
     prefix: classpath:/templates/
+    cache: false
   profiles:
     active: dev
 

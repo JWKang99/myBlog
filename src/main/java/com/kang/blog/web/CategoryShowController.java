@@ -38,7 +38,6 @@ public class CategoryShowController {
         PageInfo<Blog> pageInfo = new PageInfo<>(blogs);
         model.addAttribute("page",pageInfo);
         model.addAttribute("categories",categories);
-        //model.addAttribute("page",blogService.listBlog(pageable,blogQuery));
         model.addAttribute("activeCategoryId",id);
         return "categories";
     }
