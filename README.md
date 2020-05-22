@@ -1,6 +1,6 @@
 # myBlog
 个人博客
-Springboot+hiberate+thymeleaf
+Springboot+mybatis+thymeleaf
 
 需要新建一个blog数据库，运行之后自动建表
 
