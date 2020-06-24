@@ -37,7 +37,7 @@
         </div>
         <div class="ui bottom attached segment m-padded-tb-large">
             <div class="ui labeled button m-margin-tb-tiny" th:each="category : ${categories}">
-                <a href="#" th:href="@{/categories/{id}(id=${category.id})}" class="ui basic button"
+                <a href="#" th:href="@{{id}(id=${category.id})}" class="ui basic button"
                    th:classappend="${category.id==activeCategoryId}?'teal'" th:text="${category.name}">java</a>
                 <div class="ui basic left pointing label" th:classappend="${category.id==activeCategoryId}?'teal'"
                      th:text="${#arrays.length(category.blogs)}">14

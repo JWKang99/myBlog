@@ -36,6 +36,16 @@ public class TagServiceImpl implements TagService {
     }
 
     @Override
+    public List<Tag> getAllTag(Long userId) {
+        return tagMapper.findAllTag(userId);
+    }
+
+    @Override
+    public List<Tag> getTagsPage(Long userId) {
+        return tagMapper.getTagsPage(userId);
+    }
+
+    @Override
     public int updateTag(Long id, Tag tag) {
         Tag findRes = tagMapper.findTagById(id);
         if(findRes == null){
@@ -61,8 +71,8 @@ public class TagServiceImpl implements TagService {
     }
 
     @Override
-    public Tag getTagByName(String name) {
-        return tagMapper.findTagByName(name);
+    public Tag getTagByName(Long userId,String name) {
+        return tagMapper.findTagByName(userId,name);
     }
 
     @Override

@@ -7,6 +7,7 @@
     <resultMap id="category" type="Category">
         <id property="id" column="category_id"/>
         <result property="name" column="name"/>
+        <result property="userId" column="user_id"></result>
         <collection property="blogs" ofType="Blog">
             <id property="id" column="blog_id"/>
             <result property="title" column="title"/>
@@ -15,7 +16,7 @@
     </resultMap>
 
     <insert id="saveCategory" parameterType="Category">
-        insert into blog.t_category values (#{id},#{name})
+        insert into blog.t_category values (#{id},#{name},#{userId})
     </insert>
 
     <update id="updateCategory" parameterType="Category">
@@ -23,7 +24,7 @@
     </update>
 
     <delete id="deleteById">
-        DELETE FROM blog.t_category c WHERE c.id =#{id}
+        DELETE FROM blog.t_category WHERE id =#{id}
     </delete>
 
     <select id="findByName" resultMap="category">
@@ -31,20 +32,27 @@
     </select>
 
 
-
     <select id="findById" resultType="Category">
         SELECT * FROM blog.t_category where id=#{id}
     </select>
 
     <select id="findAllCategories" resultType="Category">
-        SELECT * FROM blog.t_category
+        SELECT * FROM blog.t_category c
+        WHERE c.user_id = #{userId}
     </select>
 
-    <!--  首页展示分类需直到博客数量,故联合blog表,保存blog的属性  -->
+    <!--  首页展示分类需知道博客数量,故联合blog表,保存blog的属性  -->
     <select id="getIndexCategories" resultMap="category">
         select c.id as category_id, c.name, b.id blog_id
         from blog.t_category c, blog.t_blog b
-        where c.id = b.category_id
+        where c.id = b.category_id and c.user_id = #{userId}
+    </select>
+
+    <!--  分类页展示所有标签 包括该分类下的博客数量  -->
+    <select id="getCategoriesPage" resultMap="category">
+        select c.id as category_id, c.name, b.id blog_id
+        from blog.t_category c, blog.t_blog b
+        where c.id = b.category_id and c.user_id = #{userId}
     </select>
 
 </mapper>

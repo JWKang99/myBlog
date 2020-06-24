@@ -26,10 +26,12 @@ public interface CategoryMapper {
     Category findById(Long id);
 
     //分页查找所有分类
-    List<Category> findAllCategories();
+    List<Category> findAllCategories(Long userId);
 
     //首页展示分类
     List<Category> getIndexCategories();
+
+    List<Category> getCategoriesPage(Long userId);
 
 
 }

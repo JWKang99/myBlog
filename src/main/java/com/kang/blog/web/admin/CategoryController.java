@@ -4,6 +4,7 @@ package com.kang.blog.web.admin;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.kang.blog.entity.Category;
+import com.kang.blog.entity.User;
 import com.kang.blog.service.CategoryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -12,6 +13,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 import java.util.List;
 
@@ -22,9 +24,16 @@ public class CategoryController {
     @Autowired
     private CategoryService categoryService;
 
+    private Long userId;
+
     @GetMapping("/categories")
-    public String getCategories(@RequestParam(required = false,defaultValue = "1",value = "page") int page, Model model){
-        List<Category> categories = categoryService.getAllCategories();
+    public String getCategories(@RequestParam(required = false,defaultValue = "1",value = "page") int page,
+                                Model model, HttpSession session){
+        //从session中拿到当前登录用户的id
+        User user = (User)session.getAttribute("user");
+        userId = user.getId();
+
+        List<Category> categories = categoryService.getAllCategories(userId);
 
         PageHelper.startPage(page,8);
 
@@ -50,6 +59,7 @@ public class CategoryController {
             attributes.addFlashAttribute("message","该分类已存在");
             return "redirect:/admin/categories/input";
         }
+        category.setUserId(userId);
         int res = categoryService.saveCategory(category);
         if(res>0){
             attributes.addFlashAttribute("message","新增成功");
@@ -60,13 +70,28 @@ public class CategoryController {
         //若直接定位admin/tags直接返回html页面没经过数据查询
         return "redirect:/admin/categories";
     }
+
+    /**
+     * 获取更新分类页面
+     * @param id
+     * @param model
+     * @return
+     */
     @GetMapping("/categories/{id}/input")
     public String editInput(@PathVariable Long id, Model model){
         Category c = categoryService.getCategory(id);
+        //把要更新的分类传到前端显示
         model.addAttribute("category",c);
         System.out.println(c);
         return "admin/category-publish";
     }
+
+    /**
+     * 根据分类id删除
+     * @param id
+     * @param attributes
+     * @return
+     */
     @GetMapping("/categories/{id}/delete")
     public String delete(@PathVariable Long id,RedirectAttributes attributes){
         Category c = categoryService.getCategory(id);

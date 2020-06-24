@@ -32,13 +32,18 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
-    public List<Category> getAllCategories() {
-        return categoryMapper.findAllCategories();
+    public List<Category> getAllCategories(Long userId) {
+        return categoryMapper.findAllCategories(userId);
     }
 
     @Override
     public List<Category> getIndexCategories() {
         return categoryMapper.getIndexCategories();
+    }
+
+    @Override
+    public List<Category> getCategoriesPage(Long userId) {
+        return categoryMapper.getCategoriesPage(userId);
     }
 
     @Override

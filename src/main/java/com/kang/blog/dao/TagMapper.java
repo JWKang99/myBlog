@@ -18,10 +18,17 @@ public interface TagMapper{
 
     Tag findTagById(Long id);
 
-    Tag findTagByName(String name);
+    Tag findTagByName(Long userId,String name);
 
     List<Tag> findAllTags();
 
+    //后台管理展示 标签列表，不显示该标签下的博客数量
+    List<Tag> findAllTag(Long userId);
+
+    //游客页面展示标签，包含博客数量
+    List<Tag> getTagsPage(Long userId);
+
+    //暂时废弃
     List<Tag> getIndexTags();
 
 

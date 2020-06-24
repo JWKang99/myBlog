@@ -17,7 +17,13 @@ import javax.servlet.http.HttpSession;
 public class LoginController {
     @Autowired
     private UserService userService;
+
     @GetMapping
+    public String afterLogin() {
+        return "admin/index";
+    }
+
+    @GetMapping("/login")
     public String loginPage() {
         return "admin/login";
     }
@@ -30,7 +36,9 @@ public class LoginController {
         User user = userService.checkUser(username,password);
         if(user!=null){
             user.setPassword(null);
+
             session.setAttribute("user",user);
+
             return "admin/index";
         }else{
             //在此不能用model存储message,因为重定向之后页面拿不到错误信息

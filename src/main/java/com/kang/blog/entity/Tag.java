@@ -6,11 +6,22 @@ import java.util.List;
 public class Tag {
 
     private Long id;
+
     private String name;
+
     private List<Blog> blogs = new ArrayList<>();
 
+    private Long userId;
 
     public Tag() {
+    }
+
+    public Long getUserId() {
+        return userId;
+    }
+
+    public void setUserId(Long userId) {
+        this.userId = userId;
     }
 
     public Long getId() {

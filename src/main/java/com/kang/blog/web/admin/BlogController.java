@@ -30,16 +30,30 @@ public class BlogController {
     @Autowired
     private CategoryService categoryService;
 
+    private Long userId;
+
     private void setCategoryAndTag(Model model){
-        model.addAttribute("categories",categoryService.getAllCategories());
-        model.addAttribute("tags",tagService.getAllTags());
+        model.addAttribute("categories",categoryService.getAllCategories(userId));
+        model.addAttribute("tags",tagService.getAllTag(userId));
     }
 
-    //后台管理博客列表
+    /**
+     * 展示后台管理博客列表
+     * @param page 分页工具
+     * @param model
+     * @param session 用于获取当前登录用户
+     * @return
+     */
     @GetMapping("/blogs")
-    public String list(@RequestParam(required = false, defaultValue = "1", value = "page")int page, Model model){
-        PageHelper.startPage(page,8);
-        List<Blog> blogList = blogService.getAllBlogs();
+    public String list(@RequestParam(required = false, defaultValue = "1", value = "page")int page,
+                       Model model,HttpSession session){
+        PageHelper.startPage(page,10);
+
+        //从session中拿到当前登录用户的id
+        User user = (User)session.getAttribute("user");
+        userId = user.getId();
+
+        List<Blog> blogList = blogService.getAllBlogs(userId);
         PageInfo<Blog> blogs = new PageInfo<>(blogList);
         model.addAttribute("blogs",blogs);
         //此处需要获取类型列表，筛选所需
@@ -47,12 +61,21 @@ public class BlogController {
         return "admin/blogs";
     }
 
-    //后台管理条件搜索博客
+    /**
+     * 后台管理博客 搜索
+     * @param page
+     * @param blog blog对象里封装了搜索的条件，包括博主的id
+     * @param model
+     * @return
+     */
     @PostMapping("/blogs/search")
-    public String search(@RequestParam(required = false,defaultValue = "1",value = "page")int page, Blog blog, Model model){
-        System.out.println(blog);
+    public String search(@RequestParam(required = false,defaultValue = "1",value = "page")int page,
+                         Blog blog, Model model){
+
+        //用于筛选当前登录用户的博客列表
+        blog.setUserId(userId);
         List<Blog> blogList = blogService.getSearchAdminBlog(blog);
-        PageHelper.startPage(page,8);
+        PageHelper.startPage(page,10);
         PageInfo<Blog> blogs = new PageInfo<>(blogList);
         model.addAttribute("blogs",blogs);
         //返回一个片段
@@ -87,7 +110,7 @@ public class BlogController {
     @PostMapping("/blogs/input")
     public String input(Blog blog, HttpSession session,RedirectAttributes attributes){
         blog.setUser((User)session.getAttribute("user"));
-        blog.setUserId(blog.getUser().getId());
+        blog.setUserId(userId);
 
         //blog.getCategory().getId()对应页面中的category.id
         blog.setCategory(categoryService.getCategory(blog.getCategory().getId()));

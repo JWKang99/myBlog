@@ -12,11 +12,13 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
 
 @Controller
+@RequestMapping("/{userId}")
 public class CategoryShowController {
 
     @Autowired
@@ -27,9 +29,10 @@ public class CategoryShowController {
 
     @GetMapping("/categories/{id}")
     public String categories(@RequestParam(required = false,defaultValue = "1",value = "page")int page, Model model,
-                             @PathVariable Long id){
+                             @PathVariable Long userId,@PathVariable Long id){
         PageHelper.startPage(page,8);
-        List<Category> categories = categoryService.getIndexCategories();
+        List<Category> categories = categoryService.getCategoriesPage(userId);
+        model.addAttribute("userId",userId);
         if(id==-1){
             //从导航栏进入分类页
             id = categories.get(0).getId();

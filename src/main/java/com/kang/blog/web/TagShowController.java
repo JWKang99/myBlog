@@ -11,11 +11,13 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
 
 @Controller
+@RequestMapping("/{userId}")
 public class TagShowController {
 
     @Autowired
@@ -26,8 +28,9 @@ public class TagShowController {
 
     @GetMapping("/tags/{id}")
     public String tags(@RequestParam(required = false,defaultValue = "1",value = "page") int page, Model model,
-                             @PathVariable Long id){
-        List<Tag> tags = tagService.getIndexTags();
+                       @PathVariable Long userId,@PathVariable Long id){
+        List<Tag> tags = tagService.getTagsPage(userId);
+        model.addAttribute("userId",userId);
         if(id==-1){
             //从导航栏进入分类页
             id = tags.get(0).getId();

@@ -7,10 +7,22 @@ import java.util.ArrayList;
 public class Category {
 
     private Long id;
+
     private String name;
+
     private List<Blog> blogs = new ArrayList<>();
 
+    private Long userId;
+
     public Category() {
+    }
+
+    public Long getUserId() {
+        return userId;
+    }
+
+    public void setUserId(Long userId) {
+        this.userId = userId;
     }
 
     public Long getId() {

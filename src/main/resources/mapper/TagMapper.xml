@@ -7,6 +7,7 @@
     <resultMap id="tag" type="Tag">
         <id property="id" column="id"/>
         <result property="name" column="name"/>
+        <result property="userId" column="user_id"></result>
         <collection property="blogs" ofType="Blog">
             <id property="id" column="blog_id"/>
             <result property="title" column="title"/>
@@ -14,7 +15,7 @@
     </resultMap>
 
     <insert id="saveTag" parameterType="Tag">
-        insert into blog.t_tag values (#{id},#{name})
+        insert into blog.t_tag values (#{id},#{name},#{userId})
     </insert>
 
     <update id="updateTag" parameterType="Tag">
@@ -30,17 +31,28 @@
     </select>
 
     <select id="findTagByName" resultType="Tag">
-        SELECT * FROM blog.t_tag where name=#{name}
+        SELECT * FROM blog.t_tag t where t.name=#{name} and t.user_id = #{userId}
     </select>
 
     <select id="findAllTags" resultType="Tag">
         SELECT * FROM blog.t_tag
     </select>
 
+    <select id="findAllTag" resultType="Tag" parameterType="java.lang.Long">
+        SELECT * FROM blog.t_tag t
+        WHERE t.user_id = #{userId}
+    </select>
+
     <select id="getIndexTags" resultMap="tag">
         select t.id, t.name, b.id as blog_id, b.title
         from blog.t_tag t, blog.t_blog b, blog.t_blog_tags bt
         where t.id = bt.tags_id and b.id = bt.blogs_id
+    </select>
+
+    <select id="getTagsPage" resultMap="tag">
+        select t.id, t.name, b.id as blog_id, b.title
+        from blog.t_tag t, blog.t_blog b, blog.t_blog_tags bt
+        where t.id = bt.tags_id and b.id = bt.blogs_id and t.user_id = #{userId}
     </select>
 
 </mapper>

@@ -28,13 +28,19 @@ public interface BlogMapper {
 
     List<Blog> getAllPublished();
 
-    List<Blog> getAllBlogs();
+    //获取所有已发布的博客，统计总博客数
+    List<Blog> getAllPublishedByUser(Long userId);
+
+    List<Blog> getAllBlogs(Long userId);
 
     //后台条件搜索
     List<Blog> getSearchAdminBlog(Blog blog);
 
     //全局搜索博客
     List<Blog> getSearchBlogs(String query);
+
+    //搜索当前博主博客
+    List<Blog> getSearchBlogsByUser(Long userId,String query);
 
     List<Blog> getRecommendBlogs(int size);
 
@@ -46,11 +52,21 @@ public interface BlogMapper {
     List<String> findGroupYear();
 
     //按年份搜索博客
-    List<Blog> findByYear( String year);
+    List<Blog> findByYear(String year);
 
-    //主页博客列表
+    //查询所有年份,根据指定博主
+    List<String> findGroupYearByUser(Long userId);
+
+    //按年份搜索博客,根据指定博主
+    List<Blog> findByYearByUser(Long userId,String year);
+
+    //主页博客列表,暂时不用
     List<Blog> getIndexBlog();
 
+    //主页展示已发布博客列表
+    List<Blog> getIndexBlogByUser(Long userId);
 
+    //获取对应博主的首页推荐博客
+    List<Blog> getRecommendBlogsByUser(Long userId,int size);
 
 }

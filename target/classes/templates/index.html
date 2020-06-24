@@ -16,8 +16,12 @@
     <div class="ui container m-container">
         <div class="ui stackable grid">
             <!--左边博客列表-->
+            <input type="hidden" id="userId" th:value="${userId}">
             <div class="eleven wide column" id="blog-container">
+                <!-- 保存当前访问博主的id -->
+
                 <input type="hidden" name="page">
+
                 <div th:fragment="indexBlogs">
                     <!--博客列表顶部标识-->
 
@@ -67,7 +71,7 @@
                                             </div>
                                         </div>
                                         <div class="right aligned five wide column">
-                                            <a href="#" th:href="@{/categories/{id}(id=${blog.category.id})}"
+                                            <a href="#" th:href="@{/{userId}/categories/{id}(userId=${userId},id=${blog.category.id})}"
                                                class="ui label teal m-padded-tiny m-text-thin"
                                                th:text="${blog.category.name}" target="_blank">唯物主义</a>
                                         </div>
@@ -110,14 +114,14 @@
                                 <i class="idea icon"></i>分类
                             </div>
                             <div class="right aligned column">
-                                <a href="#" th:href="@{/categories/-1}" target="_blank">more <i
+                                <a href="#" th:href="@{/{userId}/categories/-1(userId=${userId})}" target="_blank">more <i
                                         class="angle double right icon"></i></a>
                             </div>
                         </div>
                     </div>
                     <div class="ui teal segment m-container">
                         <div class="ui fluid vertical menu">
-                            <a href="#" th:href="@{/categories/{id}(id=${category.id})}"
+                            <a href="#" th:href="@{/{userId}/categories/{id}(userId=${userId},id=${category.id})}"
                                th:if="${#arrays.length(category.blogs)>0}" class="item"
                                th:each="category : ${categories}">
                                 <span th:text="${category.name}">学习日志</span>
@@ -138,14 +142,14 @@
                                 <i class="tags icon"></i>标签
                             </div>
                             <div class="right aligned column">
-                                <a href="#" th:href="@{/tags/-1}" target="_blank">more <i
+                                <a href="#" th:href="@{/{userId}/tags/-1(userId=${userId})}" target="_blank">more <i
                                         class="angle double right icon"></i></a>
                             </div>
                         </div>
                     </div>
                     <div class="ui teal segment">
 
-                        <a href="#" th:href="@{/tags/{id}(id=${tag.id})}" target="_blank"
+                        <a href="#" th:href="@{/{userId}/tags/{id}(userId=${userId},id=${tag.id})}" target="_blank"
                            class="ui teal basic label m-margin-tb-mini"
                            th:each="tag : ${tags}">
                             <span th:text="${tag.name}">基础知识</span>
@@ -163,9 +167,9 @@
                             <div class="column">
                                 <i class="bookmark icon"></i>最新推荐
                             </div>
-                            <div class="right aligned column">
-                                <a href="#" target="_blank">more <i class="angle double right icon"></i></a>
-                            </div>
+<!--                            <div class="right aligned column">-->
+<!--                                <a href="#" target="_blank">more <i class="angle double right icon"></i></a>-->
+<!--                            </div>-->
                         </div>
                     </div>
                     <div class="ui segment" th:each="rblog : ${recommendBlogs}">
@@ -183,11 +187,13 @@
 <script>
     $('.menu.toggle').click(function () {
         $('.m-item').toggleClass('m-mobile-hide');
+
     });
-    $('#blog-container').load(/*[[@{/indexBlogs}]]*/"/indexBlogs");
+    $('#blog-container').load(/*[[@{/indexBlogs}]]*/"/"+$("#userId").val()+"/indexBlogs");
     //ajax请求
     function page(obj) {
-        $("#blog-container").load("/indexBlogs/?page="+$(obj).data("page"),
+        console.log($("#userId").val());
+        $("#blog-container").load("/"+$("#userId").val()+"/indexBlogs/?page="+$(obj).data("page"),
             function (responseTxt, statusTxt, xhr) {
             //回调方法,执行成功之后的操
              $(window).scrollTo($('#blog-container'),500);

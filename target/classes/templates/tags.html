@@ -26,7 +26,7 @@
             </div>
         </div>
         <div class="ui bottom attached segment m-padded-tb-large">
-            <a href="#" th:href="@{/tags/{id}(id=${tag.id})}" target="_blank"
+            <a href="#" th:href="@{{id}(id=${tag.id})}"
                class="ui basic left pointing large label m-margin-tb-tiny"
                th:classappend="${tag.id==activeTagId}?'teal'" th:each="tag : ${tags}">
                 <span th:text="${tag.name}">标签名称</span>

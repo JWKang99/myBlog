@@ -76,10 +76,10 @@
         <!--翻页按钮-->
         <div class="ui bottom attached segment center aligned">
             <div class="ui tiny pagination menu">
-                <a class="item" href="#" th:href="@{/(page=${page.prePage})}">上一页</a>
+                <a class="item" href="#" th:href="@{/(page=${page.prePage})}" th:unless="${page.isFirstPage}">上一页</a>
                 <span class="item">第<span th:text="${page.pageNum}"></span>页</span>
                 <span class="item">总<span th:text="${page.pages}"></span>页</span>
-                <a class="item" href="#" th:href="@{/(page=${page.nextPage})}">下一页</a>
+                <a class="item" href="#" th:href="@{/(page=${page.nextPage})}" th:unless="${page.isLastPage}">下一页</a>
             </div>
         </div>
     </div>

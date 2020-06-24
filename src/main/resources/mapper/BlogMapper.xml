@@ -62,8 +62,22 @@
         where b.category_id= c.id and  u.id = b.user_id and b.published=1 order by b.update_time desc
     </select>
 
+    <select id="getIndexBlogByUser" resultMap="blog">  /*主页博客展示*/
+    select b.id, b.title, b.first_picture, b.views, b.update_time, b.description,
+           c.name category_name, c.id c_id,
+           u.nickname, u.avatar
+    from blog.t_blog b, blog.t_category c, blog.t_user u
+    where u.id = #{userId} and b.category_id= c.id and  u.id = b.user_id and b.published=1 order by b.update_time desc
+    </select>
+
     <select id="getRecommendBlogs" resultMap="blog">
         select b.id, b.title from t_blog b where b.recommended=1 order by update_time desc limit #{size};
+    </select>
+
+    <select id="getRecommendBlogsByUser" resultMap="blog">
+        select b.id, b.title from t_blog b
+        where b.recommended=1 and b.user_id = #{userId}
+        order by update_time desc limit #{size};
     </select>
 
     <select id="getByCategoryId" resultMap="blog">
@@ -98,17 +112,36 @@
         where DATE_FORMAT(b.update_time, '%Y') = #{year}
     </select>
 
+    <select id="findGroupYearByUser" resultType="String">
+        select DATE_FORMAT(b.update_time, '%Y')
+        from blog.t_blog b
+        where b.user_id = #{userId}
+        order by b.update_time desc
+    </select>
+
+    <select id="findByYearByUser" resultMap="blog">
+        select b.title, b.update_time, b.id, b.flag
+        from blog.t_blog b
+        where b.user_id = #{userId} and DATE_FORMAT(b.update_time, '%Y') = #{year}
+    </select>
+
     <select id="getAllBlogs" resultMap="blog">
         select b.id, b.published, b.flag, b.title, b.recommended,b.update_time,
                c.name as category_name
         from blog.t_blog b,blog.t_category c
-        where c.id = b.category_id order by update_time desc
+        where c.id = b.category_id and b.user_id = #{userId} order by update_time desc
     </select>
 
     <select id="getAllPublished" resultType="Blog">
         select b.id, b.flag, b.title, b.update_time
         from blog.t_blog b
         where b.published=1 order by update_time desc
+    </select>
+
+    <select id="getAllPublishedByUser" resultType="Blog">
+        select b.id, b.flag, b.title, b.update_time
+        from blog.t_blog b
+        where b.published=1 and b.user_id = #{userId} order by update_time desc
     </select>
 
     <select id="getBlog" resultMap="blog">
@@ -149,13 +182,13 @@
         where id = #{id};
     </update>
 
-    <select id="getSearchAdminBlog" parameterType="Blog" resultMap="blog">
+    <select id="getSearchAdminBlog" resultMap="blog">
         <bind name="pattern" value="'%' + title + '%'" />
         select b.id, b.title, b.update_time, b.recommended, b.published, b.category_id, c.id, c.name as category_name
         from blog.t_blog b ,blog.t_category c
         <where>
             <if test="1 == 1">
-                b.category_id = c.id
+                b.category_id = c.id and b.user_id = #{userId}
             </if>
             <if test="categoryId != null">
                 and b.category_id = #{categoryId}
@@ -175,6 +208,18 @@
         from blog.t_blog b, blog.t_category c, blog.t_user u
         where b.category_id= c.id and  u.id = b.user_id and b.published=1 and
               (b.title like #{pattern} or b.content like  #{pattern})
+        order by b.update_time desc
+    </select>
+
+
+    <select id="getSearchBlogsByUser" resultMap="blog">
+        <bind name="pattern" value="'%' + query + '%'" />
+        select b.id, b.title, b.first_picture, b.views, b.update_time, b.description,
+        c.name category_name, c.id c_id,
+        u.nickname, u.avatar
+        from blog.t_blog b, blog.t_category c, blog.t_user u
+        where u.id = #{userId} and b.category_id= c.id and  u.id = b.user_id and b.published=1 and
+        (b.title like #{pattern} or b.content like  #{pattern})
         order by b.update_time desc
     </select>
 </mapper>

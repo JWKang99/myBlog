@@ -12,9 +12,11 @@ public interface CategoryService {
 
     Category getCategoryByName(String name);
 
-    List<Category> getAllCategories();
+    List<Category> getAllCategories(Long userId);
 
     List<Category> getIndexCategories();
+
+    List<Category> getCategoriesPage(Long userId);
 
     int updateCategory(Category category);
 

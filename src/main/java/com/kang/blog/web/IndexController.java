@@ -14,11 +14,13 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
 
 @Controller
+@RequestMapping("/{userId}")
 public class IndexController {
 
     @Autowired
@@ -30,18 +32,17 @@ public class IndexController {
     @Autowired
     private TagService tagService;
 
-    @Autowired
-    private CommentService commentService;
-
-    @GetMapping("/")
-    public String index(@RequestParam(required = false,defaultValue = "1",value = "page") int page,Model model){
-        PageHelper.startPage(page,8);
-        List<Blog> blogList = blogService.getIndexBlog();
+    @GetMapping
+    public String index(@RequestParam(required = false,defaultValue = "1",value = "page") int page,
+                        @PathVariable Long userId, Model model){
+        PageHelper.startPage(page,3);
+        List<Blog> blogList = blogService.getIndexBlogByUser(userId);
         PageInfo<Blog> blogs = new PageInfo<Blog>(blogList);
+        model.addAttribute("userId",userId);
         model.addAttribute("page",blogs);
-        List<Tag> tagList = tagService.getIndexTags();
-        List<Category> categoryList = categoryService.getIndexCategories();
-        List<Blog> recommendList = blogService.getRecommendBlogs(4);
+        List<Tag> tagList = tagService.getTagsPage(userId);
+        List<Category> categoryList = categoryService.getCategoriesPage(userId);
+        List<Blog> recommendList = blogService.getRecommendBlogsByUser(userId,4);
         model.addAttribute("categories",categoryList);
         model.addAttribute("tags",tagList);
         model.addAttribute("recommendBlogs",recommendList);
@@ -49,27 +50,23 @@ public class IndexController {
     }
 
     @GetMapping("/indexBlogs")
-    public String indexBlogs(@RequestParam(required = false,defaultValue = "1",value = "page") int page, Model model){
-        PageHelper.startPage(page,8);
-        List<Blog> blogList = blogService.getIndexBlog();
+    public String indexBlogs(@RequestParam(required = false,defaultValue = "1",value = "page") int page,
+                             @PathVariable Long userId,Model model){
+        PageHelper.startPage(page,3);
+        List<Blog> blogList = blogService.getIndexBlogByUser(userId);
         PageInfo<Blog> blogs = new PageInfo<Blog>(blogList);
         model.addAttribute("page",blogs);
         return "index :: indexBlogs";
     }
 
-    @GetMapping("/blog/{id}")
-    public String blog(@PathVariable Long id,Model model){
-        model.addAttribute("blog",blogService.getDetailBlog(id));
-        return "blog";
-    }
 
     @GetMapping("/search")
     public String search(@RequestParam(required = false,defaultValue = "1",value = "page") int page,
-                         @RequestParam String query,
+                         @PathVariable Long userId,@RequestParam String query,
                          Model model){
         System.out.println(query);
         PageHelper.startPage(page,8);
-        List<Blog> blogList = blogService.getSearchBlog(query);
+        List<Blog> blogList = blogService.getSearchBlogByUser(userId,query);
         PageInfo<Blog> blogs = new PageInfo<>(blogList);
         model.addAttribute("page",blogs);
         model.addAttribute("query",query);
@@ -78,7 +75,7 @@ public class IndexController {
 
     @GetMapping("/footer/blogs")
     public String newBlogs(Model model){
-        model.addAttribute("newblogs",blogService.getRecommendBlogs(3));
+        //model.addAttribute("newblogs",blogService.getRecommendBlogs(3));
         return "_fragment :: newbloglist";
     }
 

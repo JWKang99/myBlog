@@ -28,6 +28,7 @@ public class BlogServiceImpl implements BlogService {
     public BlogMapper getBlogMapper() {
         return blogMapper;
     }
+
     @Autowired
     public void setBlogMapper(BlogMapper blogMapper) {
         this.blogMapper = blogMapper;
@@ -53,13 +54,18 @@ public class BlogServiceImpl implements BlogService {
     }
 
     @Override
-    public List<Blog> getAllBlogs() {
-        return blogMapper.getAllBlogs();
+    public List<Blog> getAllBlogs(Long userId) {
+        return blogMapper.getAllBlogs(userId);
     }
 
     @Override
     public List<Blog> getIndexBlog() {
         return blogMapper.getIndexBlog();
+    }
+
+    @Override
+    public List<Blog> getIndexBlogByUser(Long userId) {
+        return blogMapper.getIndexBlogByUser(userId);
     }
 
     /**
@@ -69,6 +75,11 @@ public class BlogServiceImpl implements BlogService {
     @Override
     public List<Blog> getSearchBlog(String query) {
         return blogMapper.getSearchBlogs(query);
+    }
+
+    @Override
+    public List<Blog> getSearchBlogByUser(Long userId, String query) {
+        return blogMapper.getSearchBlogsByUser(userId,query);
     }
 
     @Override
@@ -102,6 +113,26 @@ public class BlogServiceImpl implements BlogService {
     }
 
     @Override
+    public Map<String, List<Blog>> archiveBlogsByUser(Long userId) {
+        //获取所有博客的年份
+        List<String> years = blogMapper.findGroupYearByUser(userId);
+        for(String year : years){
+            System.out.println(year);
+        }
+        Map<String, List<Blog>> map = new HashMap<>();
+        for(String year : years){
+            List<Blog> blogs = blogMapper.findByYearByUser(userId,year);
+            map.put(year,blogs);
+        }
+        return map;
+    }
+
+    @Override
+    public int countBlogByUser(Long userId) {
+        return blogMapper.getAllPublishedByUser(userId).size();
+    }
+
+    @Override
     public int countBlog() {
         return blogMapper.getAllPublished().size();
     }
@@ -117,6 +148,7 @@ public class BlogServiceImpl implements BlogService {
         Long blog_id = blog.getId();
         //需手动把tag和blog的对应关系存到blog_tag表中
         List<Tag> tags = blog.getTags();
+        //将博客和标签的对应关系存储到中间表
         for(Tag tag : tags){
             //逐一保存到t_blog_tag表中
             blogMapper.saveBlogTag(blog.getId(),tag.getId());
@@ -133,7 +165,7 @@ public class BlogServiceImpl implements BlogService {
         }
 
         blog.setUpdateTime(new Date());
-        //先删除原来的关联关系
+        //先删除原来的博客标签关联关系
         blogMapper.deleteBlogTagByBlogId(blog.getId());
         List<Tag> tags = blog.getTags();
         for(Tag tag : tags){
@@ -154,5 +186,10 @@ public class BlogServiceImpl implements BlogService {
     @Override
     public List<Blog> getRecommendBlogs(int size) {
         return blogMapper.getRecommendBlogs(size);
+    }
+
+    @Override
+    public List<Blog> getRecommendBlogsByUser(Long userId, int size) {
+        return blogMapper.getRecommendBlogsByUser(userId,size);
     }
 }
